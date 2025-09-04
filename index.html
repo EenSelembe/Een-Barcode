@@ -3,83 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <title>Een Barcode App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    body, html {
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Halaman upload */
+    #uploadSection {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100%;
       background: url('anime.jpg') no-repeat center center fixed;
       background-size: cover;
     }
 
-    #uploadContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    #uploadLabel {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 20px 40px;
-      border-radius: 20px;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
-    }
-
-    #uploadLabel:hover {
-      transform: scale(1.05);
-    }
-
     #csvFile {
-      display: none; /* sembunyikan input asli */
+      font-size: 22px;
+      padding: 12px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.8);
+      cursor: pointer;
     }
 
-    #barcodeContainer {
+    /* Halaman barcode fullscreen */
+    #barcodeSection {
       display: none;
-      background: white;
-      min-height: 100vh;
-      padding: 20px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background: url('anime2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
     }
 
-    .icon {
+    #qrcode {
+      margin-bottom: 20px;
+    }
+
+    #qrcode canvas {
+      width: 80vw !important;
+      height: 80vw !important;
+    }
+
+    .checkboxes {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .checkboxes label {
+      font-size: 18px;
+      color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+
+    /* Tombol next (ikon panah) */
+    #nextBtn {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(255,255,255,0.7);
+      border: none;
+      padding: 15px;
+      border-radius: 50%;
       font-size: 28px;
-      color: #333;
+      cursor: pointer;
     }
   </style>
-  <!-- pakai ikon dari fontawesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <!-- Tampilan awal -->
-  <div id="uploadContainer">
-    <label for="csvFile" id="uploadLabel">
-      <i class="fas fa-cloud-upload-alt icon"></i> Upload CSV
-    </label>
+  <!-- Halaman Upload -->
+  <div id="uploadSection">
     <input type="file" id="csvFile" accept=".csv">
   </div>
 
-  <!-- Hasil barcode -->
-  <div id="barcodeContainer">
-    <h2>Daftar Barcode</h2>
-    <div id="barcodeList"></div>
+  <!-- Halaman Barcode -->
+  <div id="barcodeSection">
+    <div id="qrcode"></div>
+    <div class="checkboxes">
+      <label><input type="checkbox" id="check1"> Cek 1</label>
+      <label><input type="checkbox" id="check2"> Cek 2</label>
+    </div>
+    <button id="nextBtn">➡</button>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    document.getElementById("csvFile").addEventListener("change", () => {
-      document.getElementById("uploadContainer").style.display = "none";
-      document.body.style.background = "white";
-      document.getElementById("barcodeContainer").style.display = "block";
-      // disini lanjut fungsi parse CSV + generate QR
+    let barcodes = [];
+    let currentIndex = 0;
+    let checks = {};
+
+    const uploadSection = document.getElementById('uploadSection');
+    const barcodeSection = document.getElementById('barcodeSection');
+    const qrcodeDiv = document.getElementById('qrcode');
+    const nextBtn = document.getElementById('nextBtn');
+    const check1 = document.getElementById('check1');
+    const check2 = document.getElementById('check2');
+
+    document.getElementById('csvFile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const lines = event.target.result.split(/\r?\n/).filter(line => line.trim() !== "");
+        barcodes = lines;
+        if (barcodes.length > 0) {
+          currentIndex = 0;
+          uploadSection.style.display = "none";
+          barcodeSection.style.display = "flex";
+          showBarcode(currentIndex);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    function showBarcode(index) {
+      qrcodeDiv.innerHTML = "";
+      if (index >= barcodes.length) {
+        alert("Semua barcode sudah ditampilkan");
+        return;
+      }
+      new QRCode(qrcodeDiv, {
+        text: barcodes[index],
+        width: 600,
+        height: 600
+      });
+
+      // Update checkbox sesuai status sebelumnya
+      check1.checked = checks[index]?.check1 || false;
+      check2.checked = checks[index]?.check2 || false;
+    }
+
+    // Simpan status checkbox saat berubah
+    check1.addEventListener("change", () => {
+      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
+    });
+    check2.addEventListener("change", () => {
+      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
+    });
+
+    nextBtn.addEventListener("click", () => {
+      // Simpan dulu status checkbox
+      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
+      currentIndex++;
+      showBarcode(currentIndex);
     });
   </script>
 </body>
