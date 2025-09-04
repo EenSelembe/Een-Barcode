@@ -21,15 +21,37 @@
       height: 100%;
       background: url('anime.jpg') no-repeat center center fixed;
       background-size: cover;
+      text-align: center;
+    }
+
+    /* Tombol upload custom */
+    .upload-btn {
+      font-size: 22px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff512f, #dd2476);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .upload-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
 
     #csvFile {
-      font-size: 22px;
-      padding: 12px;
-      border: 2px solid #333;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.8);
-      cursor: pointer;
+      display: none; /* sembunyikan input asli */
+    }
+
+    .info-text {
+      color: white;
+      font-size: 16px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
 
     /* Halaman barcode fullscreen */
@@ -67,11 +89,10 @@
       border-radius: 8px;
     }
 
-    /* Tombol next (ikon panah) */
-    #nextBtn {
+    /* Tombol navigasi */
+    .navBtn {
       position: absolute;
       bottom: 30px;
-      right: 30px;
       background: rgba(255,255,255,0.7);
       border: none;
       padding: 15px;
@@ -79,12 +100,22 @@
       font-size: 28px;
       cursor: pointer;
     }
+
+    #prevBtn {
+      left: 30px;
+    }
+
+    #nextBtn {
+      right: 30px;
+    }
   </style>
 </head>
 <body>
   <!-- Halaman Upload -->
   <div id="uploadSection">
+    <label for="csvFile" class="upload-btn">📂 Pilih File CSV</label>
     <input type="file" id="csvFile" accept=".csv">
+    <div class="info-text">Upload file CSV berisi daftar barcode</div>
   </div>
 
   <!-- Halaman Barcode -->
@@ -94,7 +125,8 @@
       <label><input type="checkbox" id="check1"> Cek 1</label>
       <label><input type="checkbox" id="check2"> Cek 2</label>
     </div>
-    <button id="nextBtn">➡</button>
+    <button id="prevBtn" class="navBtn">⬅</button>
+    <button id="nextBtn" class="navBtn">➡</button>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -106,6 +138,7 @@
     const uploadSection = document.getElementById('uploadSection');
     const barcodeSection = document.getElementById('barcodeSection');
     const qrcodeDiv = document.getElementById('qrcode');
+    const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const check1 = document.getElementById('check1');
     const check2 = document.getElementById('check2');
@@ -130,10 +163,8 @@
 
     function showBarcode(index) {
       qrcodeDiv.innerHTML = "";
-      if (index >= barcodes.length) {
-        alert("Semua barcode sudah ditampilkan");
-        return;
-      }
+      if (index < 0 || index >= barcodes.length) return;
+
       new QRCode(qrcodeDiv, {
         text: barcodes[index],
         width: 600,
@@ -146,18 +177,31 @@
     }
 
     // Simpan status checkbox saat berubah
-    check1.addEventListener("change", () => {
+    function saveCheck() {
       checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
-    });
-    check2.addEventListener("change", () => {
-      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
-    });
+    }
+
+    check1.addEventListener("change", saveCheck);
+    check2.addEventListener("change", saveCheck);
 
     nextBtn.addEventListener("click", () => {
-      // Simpan dulu status checkbox
-      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
-      currentIndex++;
-      showBarcode(currentIndex);
+      saveCheck();
+      if (currentIndex < barcodes.length - 1) {
+        currentIndex++;
+        showBarcode(currentIndex);
+      } else {
+        alert("Ini barcode terakhir.");
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      saveCheck();
+      if (currentIndex > 0) {
+        currentIndex--;
+        showBarcode(currentIndex);
+      } else {
+        alert("Ini barcode pertama.");
+      }
     });
   </script>
 </body>
