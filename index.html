@@ -2,78 +2,34 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>QR Code Viewer</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <title>Barcode Viewer</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
       margin: 0;
-      background: #f5f5f5;
-      overflow-x: hidden;
-      user-select: none;
+      padding: 0;
     }
-    .upload-container {
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-    }
-    .custom-file-upload {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background-color: #007bff;
-      color: white;
-      font-size: 20px;
-      padding: 15px 30px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .custom-file-upload:hover {
-      background-color: #0056b3;
-    }
-    .custom-file-upload svg {
-      width: 24px;
-      height: 24px;
-      fill: white;
+    #uploadSection {
+      margin: 40px auto;
     }
     input[type="file"] {
-      display: none;
+      padding: 15px;
+      font-size: 18px;
     }
-    .barcode-container {
-      display: none;
-      flex-wrap: wrap;
-      justify-content: center;
+    .barcode {
+      margin: 20px;
       padding: 20px;
-      gap: 20px;
-    }
-    .barcode-item {
-      position: relative;
       background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.15);
-      text-align: center;
-      cursor: pointer;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
-    .watermark {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 30px;
-      color: rgba(0, 0, 0, 0.15);
-      font-weight: bold;
-      pointer-events: none;
-    }
-    .checklist {
+    .number-label {
       margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
+      font-weight: bold;
     }
-    /* Fullscreen */
     .fullscreen {
       display: none;
       position: fixed;
@@ -85,197 +41,130 @@
       align-items: center;
       flex-direction: column;
     }
-    .fullscreen .barcode-item {
-      box-shadow: none;
-      background: white;
-      cursor: default;
-    }
-    .fullscreen-controls {
+    .check-container {
       margin-top: 20px;
-      display: flex;
-      gap: 20px;
     }
-    .fullscreen-controls button {
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background: #007bff;
+    .watermark {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      opacity: 0.2;
+      font-size: 30px;
+      font-weight: bold;
+      color: #000;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 22px;
+      background: red;
       color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 12px;
     }
   </style>
 </head>
-<body oncontextmenu="return false">
-
-  <!-- Tombol Import -->
-  <div class="upload-container" id="uploadContainer">
-    <label for="fileInput" class="custom-file-upload">
-      <!-- Ikon SVG Upload -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v4h16v-4"/>
-      </svg>
-      Pilih File CSV
-    </label>
-    <input type="file" id="fileInput" accept=".csv">
+<body>
+  <div id="uploadSection">
+    <h2>Upload CSV Barcode</h2>
+    <input type="file" id="csvFile" accept=".csv">
   </div>
 
-  <!-- Container Barcode -->
-  <div class="barcode-container" id="barcodeContainer"></div>
+  <div id="barcodeContainer"></div>
 
-  <!-- Fullscreen -->
-  <div class="fullscreen" id="fullscreen">
-    <div id="fullscreenContent"></div>
-    <div class="fullscreen-controls">
-      <button onclick="prevBarcode()">Prev</button>
-      <button onclick="closeFullscreen()">Close</button>
-      <button onclick="nextBarcode()">Next</button>
+  <div id="fullscreenContainer" class="fullscreen">
+    <button class="close-btn" onclick="closeFullscreen()">Tutup</button>
+    <div id="fullscreenBarcode"></div>
+    <div id="fullscreenNumber"></div>
+    <div class="check-container">
+      <label><input type="checkbox" id="check1"> Ceklis 1</label>
+      <label><input type="checkbox" id="check2"> Ceklis 2</label>
     </div>
+    <div class="watermark">EEN</div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
   <script>
-    let barcodes = [];
-    let checklistStatus = [];
-    let currentIndex = 0;
+    let barcodeData = [];
 
-    document.getElementById('fileInput').addEventListener('change', handleFile);
-
-    function handleFile(event) {
-      const file = event.target.files[0];
+    document.getElementById("csvFile").addEventListener("change", function(e) {
+      const file = e.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
-        const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
-        barcodes = lines;
-        checklistStatus = Array(barcodes.length).fill(null).map(() => [false, false]);
-        displayBarcodes();
+      reader.onload = function(evt) {
+        const lines = evt.target.result.split("\n").filter(l => l.trim() !== "");
+        barcodeData = lines.map((line, i) => ({
+          code: line.trim(),
+          number: i + 1,
+          check1: false,
+          check2: false
+        }));
+        renderBarcodes();
       };
       reader.readAsText(file);
-    }
+    });
 
-    function displayBarcodes() {
-      document.getElementById('uploadContainer').style.display = 'none';
-      const container = document.getElementById('barcodeContainer');
-      container.style.display = 'flex';
-      container.innerHTML = '';
+    function renderBarcodes() {
+      const container = document.getElementById("barcodeContainer");
+      container.innerHTML = "";
+      barcodeData.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "barcode";
+        div.onclick = () => openFullscreen(index);
 
-      barcodes.forEach((code, index) => {
-        const item = document.createElement('div');
-        item.className = 'barcode-item';
-
-        const watermark = document.createElement('div');
-        watermark.className = 'watermark';
-        watermark.textContent = 'EEN';
-
-        const qrDiv = document.createElement('div');
-        new QRCode(qrDiv, {
-          text: code,
+        const qr = document.createElement("div");
+        new QRCode(qr, {
+          text: item.code,
           width: 128,
           height: 128
         });
 
-        const number = document.createElement('div');
-        number.textContent = `Nomor ${index + 1}`;
+        const label = document.createElement("div");
+        label.className = "number-label";
+        label.innerText = "Barcode #" + item.number;
 
-        const checklist = document.createElement('div');
-        checklist.className = 'checklist';
-        for (let i = 0; i < 2; i++) {
-          const cb = document.createElement('input');
-          cb.type = 'checkbox';
-          cb.checked = checklistStatus[index][i];
-          cb.addEventListener('change', () => {
-            checklistStatus[index][i] = cb.checked;
-          });
-          checklist.appendChild(cb);
-        }
-
-        item.appendChild(watermark);
-        item.appendChild(qrDiv);
-        item.appendChild(number);
-        item.appendChild(checklist);
-
-        item.onclick = (e) => {
-          if (e.target.tagName !== 'INPUT') openFullscreen(index);
-        };
-
-        container.appendChild(item);
+        div.appendChild(qr);
+        div.appendChild(label);
+        container.appendChild(div);
       });
     }
 
     function openFullscreen(index) {
-      currentIndex = index;
-      const fullscreen = document.getElementById('fullscreen');
-      fullscreen.style.display = 'flex';
-      updateFullscreen();
-    }
+      const elem = document.getElementById("fullscreenContainer");
+      const barcodeContainer = document.getElementById("fullscreenBarcode");
+      barcodeContainer.innerHTML = "";
 
-    function updateFullscreen() {
-      const content = document.getElementById('fullscreenContent');
-      content.innerHTML = '';
-      const code = barcodes[currentIndex];
+      // ambil ukuran layar (80% dari layar terkecil)
+      const screenSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
 
-      const item = document.createElement('div');
-      item.className = 'barcode-item';
-
-      const watermark = document.createElement('div');
-      watermark.className = 'watermark';
-      watermark.textContent = 'EEN';
-
-      const qrDiv = document.createElement('div');
-      new QRCode(qrDiv, {
-        text: code,
-        width: 200,
-        height: 200
+      new QRCode(barcodeContainer, {
+        text: barcodeData[index].code,
+        width: screenSize,
+        height: screenSize
       });
 
-      const number = document.createElement('div');
-      number.textContent = `Nomor ${currentIndex + 1}`;
+      document.getElementById("fullscreenNumber").innerText =
+        "Barcode #" + barcodeData[index].number;
 
-      const checklist = document.createElement('div');
-      checklist.className = 'checklist';
-      for (let i = 0; i < 2; i++) {
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = checklistStatus[currentIndex][i];
-        cb.addEventListener('change', () => {
-          checklistStatus[currentIndex][i] = cb.checked;
-        });
-        checklist.appendChild(cb);
-      }
+      document.getElementById("check1").checked = barcodeData[index].check1;
+      document.getElementById("check2").checked = barcodeData[index].check2;
 
-      item.appendChild(watermark);
-      item.appendChild(qrDiv);
-      item.appendChild(number);
-      item.appendChild(checklist);
-      content.appendChild(item);
+      elem.dataset.index = index;
+      elem.style.display = "flex";
     }
 
     function closeFullscreen() {
-      document.getElementById('fullscreen').style.display = 'none';
-      displayBarcodes(); // refresh supaya sinkron
-    }
+      const elem = document.getElementById("fullscreenContainer");
+      const index = elem.dataset.index;
 
-    function nextBarcode() {
-      if (currentIndex < barcodes.length - 1) {
-        currentIndex++;
-        updateFullscreen();
-      }
-    }
-    function prevBarcode() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateFullscreen();
-      }
-    }
+      barcodeData[index].check1 = document.getElementById("check1").checked;
+      barcodeData[index].check2 = document.getElementById("check2").checked;
 
-    // Blok PrintScreen
-    document.addEventListener('keyup', function(e) {
-      if (e.key === "PrintScreen") {
-        alert("Screenshot dinonaktifkan!");
-        navigator.clipboard.writeText("");
-      }
-    });
+      elem.style.display = "none";
+    }
   </script>
 </body>
 </html>
