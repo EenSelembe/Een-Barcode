@@ -24,7 +24,6 @@
       text-align: center;
     }
 
-    /* Tombol upload custom */
     .upload-btn {
       font-size: 22px;
       padding: 15px 30px;
@@ -67,12 +66,20 @@
     }
 
     #qrcode {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     #qrcode canvas {
       width: 80vw !important;
       height: 80vw !important;
+    }
+
+    .barcode-number {
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      margin-bottom: 12px;
     }
 
     .checkboxes {
@@ -101,13 +108,8 @@
       cursor: pointer;
     }
 
-    #prevBtn {
-      left: 30px;
-    }
-
-    #nextBtn {
-      right: 30px;
-    }
+    #prevBtn { left: 30px; }
+    #nextBtn { right: 30px; }
   </style>
 </head>
 <body>
@@ -121,6 +123,7 @@
   <!-- Halaman Barcode -->
   <div id="barcodeSection">
     <div id="qrcode"></div>
+    <div class="barcode-number" id="barcodeNumber"></div>
     <div class="checkboxes">
       <label><input type="checkbox" id="check1"> Cek 1</label>
       <label><input type="checkbox" id="check2"> Cek 2</label>
@@ -138,6 +141,7 @@
     const uploadSection = document.getElementById('uploadSection');
     const barcodeSection = document.getElementById('barcodeSection');
     const qrcodeDiv = document.getElementById('qrcode');
+    const barcodeNumberDiv = document.getElementById('barcodeNumber');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const check1 = document.getElementById('check1');
@@ -171,12 +175,14 @@
         height: 600
       });
 
+      // Nomor urut
+      barcodeNumberDiv.textContent = `#${index + 1}`;
+
       // Update checkbox sesuai status sebelumnya
       check1.checked = checks[index]?.check1 || false;
       check2.checked = checks[index]?.check2 || false;
     }
 
-    // Simpan status checkbox saat berubah
     function saveCheck() {
       checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
     }
