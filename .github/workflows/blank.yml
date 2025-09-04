@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator QR Barcode</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      background: #fff;
+    }
+    #uploadArea {
+      margin: 50px auto;
+      padding: 20px;
+      border: 2px dashed #999;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      background: #f9f9f9;
+    }
+    #barcodeContainer {
+      margin-top: 20px;
+    }
+    .barcode-item {
+      display: inline-block;
+      margin: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      position: relative;
+    }
+    .watermark {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 28px;
+      color: rgba(200,0,0,0.15);
+      font-weight: bold;
+      pointer-events: none;
+      user-select: none;
+    }
+    .checklist {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      gap: 20px;
+    }
+    .checklist label {
+      font-size: 14px;
+    }
+    .fullscreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    .fullscreen img {
+      max-width: 80%;
+      max-height: 80%;
+    }
+    .close-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background: red;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="uploadArea">
+    <h3>Import CSV Barcode</h3>
+    <input type="file" id="csvFile" accept=".csv">
+  </div>
+
+  <div id="barcodeContainer"></div>
+
+  <div id="fullscreenView" style="display:none;"></div>
+
+  <script>
+    /* ==== QRCode.js (minified) ==== */
+    // Source: https://github.com/davidshimjs/qrcodejs
+    !function(o){function t(o,t){this._el=o,this._htOption=t}function e(o,t){if(void 0===o.length)throw new Error(o.length+"/"+t);for(var e=0;e<o.length;e++)if(o[e]!==t[e])throw new Error(o+"/"+t)}function r(o){this.mode=r.Mode.MODE_8BIT_BYTE,this.data=o,this.parsedData=[];for(var t=[],e=0;e<this.data.length;e++){var n=this.data.charCodeAt(e);n>65536?(t[0]=240|(1835008&n)>>>18,t[1]=128|(258048&n)>>>12,t[2]=128|(4032&n)>>>6,t[3]=128|63&n):n>2048?(t[0]=224|(61440&n)>>>12,t[1]=128|(4032&n)>>>6,t[2]=128|63&n):n>128?(t[0]=192|(1984&n)>>>6,t[1]=128|63&n):t[0]=n,this.parsedData=this.parsedData.concat(t)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187))}function n(o,t){this.typeNumber=o,this.errorCorrectLevel=t,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}t.prototype.draw=function(o){var t=this._htOption,e=document.createElement("canvas");if(e.width=t.width,e.height=t.height,"undefined"!=typeof e.getContext){var r=e.getContext("2d"),n=o.getModuleCount(),i=t.width/n,a=t.height/n;r.fillStyle=t.colorLight,r.fillRect(0,0,t.width,t.height),r.fillStyle=t.colorDark;for(var s=0;s<n;s++)for(var h=0;h<n;h++)o.isDark(s,h)&&r.fillRect(s*i,h*a,i,a)}return e};var i={};(function(){function o(o,t){this._el=o,this._htOption=t,this._android=i.android()}t.prototype.makeCode=function(o){this._oQRCode=new n(this._htOption.typeNumber,this._htOption.correctLevel),this._oQRCode.addData(o),this._oQRCode.make(),this._el.innerHTML="",this._el.appendChild(this._oQRCode.createImgTag(this._htOption.width,this._htOption.height))}})();r.prototype.getLength=function(){return this.parsedData.length},r.prototype.write=function(o){for(var t=0;t<this.parsedData.length;t++)o.put(this.parsedData[t],8)};n.prototype.addData=function(o){this.dataList.push(new r(o)),this.dataCache=null},n.prototype.isDark=function(o,t){if(0>o||this.moduleCount<=o||0>t||this.moduleCount<=t)throw new Error(o+","+t);return this.modules[o][t]},n.prototype.getModuleCount=function(){return this.moduleCount},n.prototype.make=function(){var o=this.typeNumber,t=this.errorCorrectLevel;this.modules=new Array(o);for(var e=0;e<o;e++){this.modules[e]=new Array(o);for(var r=0;r<o;r++)this.modules[e][r]=null}},n.prototype.createImgTag=function(){var o=document.createElement("img");return o.src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",o};window.QRCode=t;})();
+
+    /* ==== App Logic ==== */
+    let checklistStatus = [];
+
+    document.getElementById('csvFile').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const rows = e.target.result.split(/\r?\n/).filter(r => r.trim() !== "");
+        const container = document.getElementById('barcodeContainer');
+        container.innerHTML = "";
+        checklistStatus = [];
+
+        rows.forEach((code, index) => {
+          checklistStatus.push([false, false]);
+
+          const item = document.createElement('div');
+          item.className = 'barcode-item';
+
+          const qrDiv = document.createElement('div');
+          new QRCode(qrDiv, {
+            text: code.trim(),
+            width: 128,
+            height: 128,
+            colorDark: "#000",
+            colorLight: "#fff",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+
+          const watermark = document.createElement('div');
+          watermark.className = 'watermark';
+          watermark.innerText = "EEN";
+          qrDiv.appendChild(watermark);
+
+          const label = document.createElement('div');
+          label.innerText = "No. " + (index + 1);
+
+          const checklist = document.createElement('div');
+          checklist.className = 'checklist';
+          const c1 = document.createElement('input');
+          c1.type = "checkbox";
+          const c2 = document.createElement('input');
+          c2.type = "checkbox";
+
+          c1.checked = checklistStatus[index][0];
+          c2.checked = checklistStatus[index][1];
+
+          c1.addEventListener('change', () => checklistStatus[index][0] = c1.checked);
+          c2.addEventListener('change', () => checklistStatus[index][1] = c2.checked);
+
+          checklist.appendChild(c1);
+          checklist.appendChild(c2);
+
+          item.appendChild(qrDiv);
+          item.appendChild(label);
+          item.appendChild(checklist);
+
+          // click → fullscreen
+          qrDiv.addEventListener('click', () => openFullscreen(code, index));
+
+          container.appendChild(item);
+        });
+      };
+      reader.readAsText(file);
+    });
+
+    function openFullscreen(code, index) {
+      const fullscreen = document.getElementById('fullscreenView');
+      fullscreen.innerHTML = "";
+
+      const qrDiv = document.createElement('div');
+      new QRCode(qrDiv, {
+        text: code,
+        width: 256,
+        height: 256,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      const watermark = document.createElement('div');
+      watermark.className = 'watermark';
+      watermark.innerText = "EEN";
+      qrDiv.appendChild(watermark);
+
+      const checklist = document.createElement('div');
+      checklist.className = 'checklist';
+      const c1 = document.createElement('input');
+      c1.type = "checkbox";
+      const c2 = document.createElement('input');
+      c2.type = "checkbox";
+
+      c1.checked = checklistStatus[index][0];
+      c2.checked = checklistStatus[index][1];
+
+      c1.addEventListener('change', () => checklistStatus[index][0] = c1.checked);
+      c2.addEventListener('change', () => checklistStatus[index][1] = c2.checked);
+
+      checklist.appendChild(c1);
+      checklist.appendChild(c2);
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = "close-btn";
+      closeBtn.innerText = "Tutup";
+      closeBtn.onclick = () => fullscreen.style.display = "none";
+
+      fullscreen.appendChild(qrDiv);
+      fullscreen.appendChild(checklist);
+      fullscreen.appendChild(closeBtn);
+      fullscreen.className = "fullscreen";
+      fullscreen.style.display = "flex";
+    }
+  </script>
+</body>
+</html>
