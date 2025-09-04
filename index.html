@@ -2,169 +2,85 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Barcode Viewer</title>
+  <title>Een Barcode App</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f4f4f4;
       margin: 0;
       padding: 0;
+      font-family: sans-serif;
+      background: url('anime.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
-    #uploadSection {
-      margin: 40px auto;
-    }
-    input[type="file"] {
-      padding: 15px;
-      font-size: 18px;
-    }
-    .barcode {
-      margin: 20px;
-      padding: 20px;
-      background: white;
-      display: inline-block;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-    .number-label {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .fullscreen {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: white;
-      z-index: 1000;
+
+    #uploadContainer {
+      display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
       flex-direction: column;
+      gap: 20px;
     }
-    .check-container {
-      margin-top: 20px;
-    }
-    .watermark {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      opacity: 0.2;
-      font-size: 30px;
-      font-weight: bold;
-      color: #000;
-    }
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
+
+    #uploadLabel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 40px;
+      border-radius: 20px;
       font-size: 22px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 8px 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    #uploadLabel:hover {
+      transform: scale(1.05);
+    }
+
+    #csvFile {
+      display: none; /* sembunyikan input asli */
+    }
+
+    #barcodeContainer {
+      display: none;
+      background: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .icon {
+      font-size: 28px;
+      color: #333;
     }
   </style>
+  <!-- pakai ikon dari fontawesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="uploadSection">
-    <h2>Upload CSV Barcode</h2>
+  <!-- Tampilan awal -->
+  <div id="uploadContainer">
+    <label for="csvFile" id="uploadLabel">
+      <i class="fas fa-cloud-upload-alt icon"></i> Upload CSV
+    </label>
     <input type="file" id="csvFile" accept=".csv">
   </div>
 
-  <div id="barcodeContainer"></div>
-
-  <div id="fullscreenContainer" class="fullscreen">
-    <button class="close-btn" onclick="closeFullscreen()">Tutup</button>
-    <div id="fullscreenBarcode"></div>
-    <div id="fullscreenNumber"></div>
-    <div class="check-container">
-      <label><input type="checkbox" id="check1"> Ceklis 1</label>
-      <label><input type="checkbox" id="check2"> Ceklis 2</label>
-    </div>
-    <div class="watermark">EEN</div>
+  <!-- Hasil barcode -->
+  <div id="barcodeContainer">
+    <h2>Daftar Barcode</h2>
+    <div id="barcodeList"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
   <script>
-    let barcodeData = [];
-
-    document.getElementById("csvFile").addEventListener("change", function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const lines = evt.target.result.split("\n").filter(l => l.trim() !== "");
-        barcodeData = lines.map((line, i) => ({
-          code: line.trim(),
-          number: i + 1,
-          check1: false,
-          check2: false
-        }));
-        renderBarcodes();
-      };
-      reader.readAsText(file);
+    document.getElementById("csvFile").addEventListener("change", () => {
+      document.getElementById("uploadContainer").style.display = "none";
+      document.body.style.background = "white";
+      document.getElementById("barcodeContainer").style.display = "block";
+      // disini lanjut fungsi parse CSV + generate QR
     });
-
-    function renderBarcodes() {
-      const container = document.getElementById("barcodeContainer");
-      container.innerHTML = "";
-      barcodeData.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "barcode";
-        div.onclick = () => openFullscreen(index);
-
-        const qr = document.createElement("div");
-        new QRCode(qr, {
-          text: item.code,
-          width: 128,
-          height: 128
-        });
-
-        const label = document.createElement("div");
-        label.className = "number-label";
-        label.innerText = "Barcode #" + item.number;
-
-        div.appendChild(qr);
-        div.appendChild(label);
-        container.appendChild(div);
-      });
-    }
-
-    function openFullscreen(index) {
-      const elem = document.getElementById("fullscreenContainer");
-      const barcodeContainer = document.getElementById("fullscreenBarcode");
-      barcodeContainer.innerHTML = "";
-
-      // ambil ukuran layar (80% dari layar terkecil)
-      const screenSize = Math.min(window.innerWidth, window.innerHeight) * 0.8;
-
-      new QRCode(barcodeContainer, {
-        text: barcodeData[index].code,
-        width: screenSize,
-        height: screenSize
-      });
-
-      document.getElementById("fullscreenNumber").innerText =
-        "Barcode #" + barcodeData[index].number;
-
-      document.getElementById("check1").checked = barcodeData[index].check1;
-      document.getElementById("check2").checked = barcodeData[index].check2;
-
-      elem.dataset.index = index;
-      elem.style.display = "flex";
-    }
-
-    function closeFullscreen() {
-      const elem = document.getElementById("fullscreenContainer");
-      const index = elem.dataset.index;
-
-      barcodeData[index].check1 = document.getElementById("check1").checked;
-      barcodeData[index].check2 = document.getElementById("check2").checked;
-
-      elem.style.display = "none";
-    }
   </script>
 </body>
 </html>
