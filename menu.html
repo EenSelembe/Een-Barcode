@@ -6,14 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Menu - Een Barcode Website</title>
 <style>
-  /* Dasar halaman */
   html, body {
     margin:0; padding:0; height:100%; width:100%;
     font-family:Arial, sans-serif;
-    overflow:hidden; /* kunci supaya layar tidak bisa digeser */
+    overflow:hidden;
   }
 
-  /* Background & layout tengah */
   body {
     background: url('anime3.jpg') no-repeat center center;
     background-size: cover;
@@ -27,14 +25,14 @@
     position: relative;
   }
 
-  /* Sambutan: Hallo RENDI (gradien + glow, geser sedikit ke atas) */
+  /* Hallo RENDI */
   #welcomeText {
-    font-size: 40px;
+    font-size: 36px;
     font-weight: 900;
     text-transform: uppercase;
     line-height: 1.2;
     margin-bottom: 16px;
-    margin-top: -40px; /* geser ke atas */
+    margin-top: -40px;
     background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -51,19 +49,18 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Teks instruksi besar, tebal, jelas */
+  /* Teks instruksi diperbaiki */
   .instruction {
-    font-size: 28px;           /* lebih besar */
-    font-weight: 900;          /* sangat tebal */
-    text-align: center;        /* rata tengah */
-    margin: 20px 0 30px;       /* jarak atas-bawah */
-    line-height: 1.4;          /* jarak antar baris */
-    color: #fff;               /* putih agar kontras */
+    font-size: 20px;        
+    font-weight: 700;       
+    text-align: center;
+    margin: 15px 0 25px;    
+    line-height: 1.4;
+    color: #fff;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
   }
 
-  /* Tombol umum */
   button {
     width:220px; padding:15px; margin:10px;
     border:none; border-radius:8px;
@@ -74,8 +71,6 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
-
-  /* Tampilan tombol nonaktif (Biosolar sementara dimatikan) */
   button:disabled {
     background: gray !important;
     cursor: not-allowed;
@@ -83,7 +78,6 @@
     transform: none;
   }
 
-  /* Tombol logout (pojok kanan atas) */
   #logoutBtn {
     position: absolute;
     top: 15px;
@@ -98,23 +92,26 @@
   }
   #logoutBtn span { font-size: 18px; }
 
-  /* Peringatan berjalan TANPA PUTUS + glow merah */
+  /* Peringatan berjalan TANPA PUTUS */
   #warning {
-    position: absolute;
-    bottom: 15px;
+    position: fixed;   /* selalu tempel di bawah layar */
+    bottom: 0;
+    left: 0;
     width: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    padding: 5px 0;
     overflow: hidden;
-    background: transparent;
   }
   #warning .marquee {
     display: inline-block;
     white-space: nowrap;
-    animation: marquee 6s linear infinite; /* atur kecepatan di sini (lebih kecil = lebih cepat) */
+    animation: marquee 6s linear infinite;
   }
   #warning span {
     display: inline-block;
-    margin-right: 80px; /* jarak antar teks */
-    font-size: 18px;
+    margin-right: 80px;
+    font-size: 16px;
     font-weight: bold;
     color: #ff0000;
     text-transform: uppercase;
@@ -122,7 +119,7 @@
   }
   @keyframes marquee {
     0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* tanpa jeda jika konten digandakan */
+    100% { transform: translateX(-50%); }
   }
   @keyframes glowRed {
     from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff3333; }
@@ -132,26 +129,20 @@
 </head>
 <body>
 
-  <!-- Tombol Logout -->
   <button id="logoutBtn" onclick="logout()">
     <span>🚪</span> Logout
   </button>
 
-  <!-- Sambutan: diisi via JS sesuai username -->
   <div id="welcomeText"></div>
 
-  <!-- Teks instruksi besar, tebal, jelas -->
   <div class="instruction">
     Barcode apa yang ingin kamu cari<br>
     Silahkan pilih dibawah ini
   </div>
 
-  <!-- Menu utama -->
-  <!-- NOTE: Hapus 'disabled' untuk mengaktifkan kembali Biosolar -->
   <button disabled onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
   <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
 
-  <!-- Peringatan berjalan tanpa putus -->
   <div id="warning">
     <div class="marquee">
       <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
@@ -162,20 +153,13 @@
   </div>
 
 <script>
-  /* =========================
-     CEK LOGIN (KOMPATIBEL DUA VERSI)
-     - Versi lama: localStorage.loggedIn === "true" & localStorage.username
-     - Versi lain: localStorage.loggedInUser (isi username)
-     ========================= */
+  // Cek login
   const isLoggedIn = (localStorage.getItem("loggedIn") === "true") || !!localStorage.getItem("loggedInUser");
   if (!isLoggedIn) {
     window.location.href = "index.html";
   }
 
-  /* =========================
-     MAPPING USERNAME → NAMA TAMPILAN
-     (contoh: sokjago46 => Rendi)
-     ========================= */
+  // Mapping username ke display name
   const displayNames = {
     "sokjago46": "Rendi",
     "admin": "Administrator",
@@ -184,16 +168,11 @@
     "user3": "Sinta"
   };
 
-  /* Ambil username dari storage (mendukung dua cara penyimpanan) */
   const storedUsername = localStorage.getItem("username") || localStorage.getItem("loggedInUser") || "User";
   const displayName = displayNames[storedUsername] || storedUsername;
 
-  /* Tampilkan sambutan */
   document.getElementById("welcomeText").innerHTML = "Hallo<br>" + displayName;
 
-  /* =========================
-     LOGOUT: bersihkan semua kemungkinan kunci sesi
-     ========================= */
   function logout(){
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("username");
@@ -201,9 +180,7 @@
     window.location.href = "index.html";
   }
 
-  /* =========================
-     CEGAH TOMBOL BACK HP (blok kembali ke halaman sebelumnya)
-     ========================= */
+  // Cegah tombol back HP
   history.pushState(null, null, location.href);
   window.onpopstate = function () {
     history.go(1);
