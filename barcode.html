@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Barcode - Een Barcode Website</title>
+<title>Barcode - EEN BARCODE WEBSITE</title>
 <style>
 html, body {
   margin:0; padding:0; height:100%; width:100%;
@@ -22,108 +22,103 @@ html, body {
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* Container tengah */
+/* Container barcode + nomor + checkbox */
 .barcode-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 200px); /* sisakan ruang untuk tombol & warning */
-  box-sizing: border-box;
-  padding: 80px 20px 100px; /* kasih jarak atas dan bawah */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;   /* barcode di tengah layar */
+  min-height:calc(100vh - 200px);
+  box-sizing:border-box;
+  padding:20px;
 }
 
-/* QR code */
-#qrcode { margin-bottom:20px; }
-#qrcode canvas { width:80vw !important; height:80vw !important; }
+#qrcode canvas {
+  width:80vw !important;
+  height:80vw !important;
+  max-width:400px;
+  max-height:400px;
+}
 
-/* Nomor barcode */
 .barcode-number {
-  font-size:22px; font-weight:bold;
+  font-size:22px;
+  font-weight:bold;
   text-shadow:1px 1px 3px black;
   margin:12px;
 }
 
-/* Checkbox */
 .checkboxes {
-  display:flex; gap:20px; justify-content:center; margin-bottom:20px;
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  margin-top:10px;
 }
 .checkboxes label {
-  font-size:18px; color:white;
+  font-size:18px;
+  color:white;
   background: rgba(0,0,0,0.5);
-  padding:5px 10px; border-radius:8px;
+  padding:5px 10px;
+  border-radius:8px;
 }
 
 /* Tombol navigasi */
 .navBtn {
   position:absolute;
-  bottom:120px;   /* dinaikkan agar tidak tabrakan dengan warning */
+  top:50%;
+  transform:translateY(-50%);
   background: rgba(255,255,255,0.7);
-  border:none; padding:15px; border-radius:50%;
-  font-size:28px; cursor:pointer;
+  border:none;
+  padding:15px;
+  border-radius:50%;
+  font-size:28px;
+  cursor:pointer;
 }
-#prevBtn { left:30px; }
-#nextBtn { right:30px; }
+#prevBtn { left:20px; }
+#nextBtn { right:20px; }
 
-/* PERINGATAN MERAH BERJALAN */
-#warning {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.9);
-  z-index: 9999;
-  padding: 5px 0;
-  overflow: hidden;
-  white-space: nowrap;
+/* Warning berjalan */
+.warning {
+  position:absolute;
+  bottom:10px;
+  width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  font-size:22px;
+  font-weight:bold;
+  color:red;
+  text-shadow:0 0 10px #ff0000, 0 0 20px #ff0000;
 }
-#warning .marquee {
-  display: inline-block;
-  padding-left: 100%; /* mulai dari luar layar kanan */
-  animation: marquee 12s linear infinite;
+.warning span {
+  display:inline-block;
+  padding-left:100%;
+  animation:scrollText 8s linear infinite;
 }
-#warning span {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff0000;
-  text-transform: uppercase;
-  animation: glowRed 1s infinite alternate;
-  margin-right: 80px;
-}
-@keyframes marquee {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-@keyframes glowRed {
-  from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff3333; }
-  to   { text-shadow: 0 0 20px #ff3333, 0 0 40px #ff0000; }
+@keyframes scrollText {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-100%); }
 }
 </style>
 </head>
 <body>
 
+<!-- Tombol kembali -->
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
 
-<!-- Konten barcode -->
+<!-- Kontainer utama barcode -->
 <div class="barcode-container">
   <div id="qrcode"></div>
   <div class="barcode-number" id="barcodeNumber"></div>
   <div class="checkboxes" id="checkboxContainer"></div>
 </div>
 
+<!-- Tombol navigasi -->
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
-<!-- PERINGATAN MERAH BERJALAN -->
-<div id="warning">
-  <div class="marquee">
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-  </div>
-</div>
+<!-- Warning berjalan -->
+<div class="warning"><span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span></div>
 
+<!-- QR Code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 let barcodes=[], currentIndex=0, checks={};
@@ -153,7 +148,9 @@ function showBarcode(index){
 
   checkboxContainer.innerHTML="";
   if(type==="solar"){
-    checkboxContainer.innerHTML = `<label><input type="checkbox" id="check1"> Cek 1</label><label><input type="checkbox" id="check2"> Cek 2</label>`;
+    checkboxContainer.innerHTML = `
+      <label><input type="checkbox" id="check1"> Cek 1</label>
+      <label><input type="checkbox" id="check2"> Cek 2</label>`;
     document.getElementById("check1").checked = checks[index]?.check1 || false;
     document.getElementById("check2").checked = checks[index]?.check2 || false;
     document.getElementById("check1").addEventListener("change",()=>saveCheck(index));
@@ -167,8 +164,12 @@ function showBarcode(index){
 
 function saveCheck(index){
   const currentChecks={};
-  if(type==="solar"){ currentChecks.check1=document.getElementById("check1").checked; currentChecks.check2=document.getElementById("check2").checked; }
-  else{ currentChecks.check1=document.getElementById("check1").checked; }
+  if(type==="solar"){
+    currentChecks.check1=document.getElementById("check1").checked;
+    currentChecks.check2=document.getElementById("check2").checked;
+  } else {
+    currentChecks.check1=document.getElementById("check1").checked;
+  }
   checks[index]=currentChecks;
 }
 
