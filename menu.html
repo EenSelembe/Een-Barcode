@@ -10,7 +10,8 @@
     body {
       margin: 0;
       height: 100vh;
-      background: linear-gradient(to bottom, #333, #000);
+      background: url('anime.jpg') no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -26,16 +27,28 @@
       font-size: 18px;
       font-weight: bold;
       color: white;
-      background: #00cc99;
+      background: linear-gradient(135deg, #ff512f, #dd2476);
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     button:hover {
-      background: #009973;
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
     }
   </style>
 </head>
 <body>
   <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
   <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+
+  <script>
+    // Fullscreen otomatis
+    document.body.addEventListener('click', ()=>{
+      if(document.documentElement.requestFullscreen){
+        document.documentElement.requestFullscreen();
+      }
+    }, {once:true});
+  </script>
 </body>
 </html>
