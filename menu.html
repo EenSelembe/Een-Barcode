@@ -95,21 +95,27 @@
     bottom: 15px;
     width: 100%;
     overflow: hidden;
-    white-space: nowrap;
-    box-sizing: border-box;
+    background: transparent;
   }
+
+  #warning .marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 8s linear infinite;
+  }
+
   #warning span {
     display: inline-block;
-    padding-right: 50px;
-    animation: marquee 5s linear infinite, glowRed 1s infinite alternate;
+    margin-right: 80px; /* jarak antar teks */
     font-size: 18px;
     font-weight: bold;
     color: #ff0000;
     text-transform: uppercase;
+    animation: glowRed 1s infinite alternate;
   }
 
   @keyframes marquee {
-    0%   { transform: translateX(0%); }
+    0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
 
@@ -138,9 +144,12 @@
 
 <!-- Peringatan berjalan -->
 <div id="warning">
-  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+  <div class="marquee">
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+  </div>
 </div>
 
 <script>
