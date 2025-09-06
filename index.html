@@ -15,12 +15,11 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
+  justify-content:center; /* posisi konten ke tengah layar */
 }
 
 /* SELAMAT DATANG besar */
 .welcome{
-  margin-top:40px;
   text-align:center;
   font-size:60px;
   font-weight:700;
@@ -32,6 +31,7 @@ body{
   text-transform:uppercase;
   letter-spacing:4px;
   text-shadow:2px 2px 8px rgba(0,0,0,0.6);
+  margin-bottom:30px;
 }
 @keyframes glow{
   from{ text-shadow:0 0 10px #ff0080,0 0 20px #ff8c00; }
@@ -50,8 +50,6 @@ body{
   padding:18px 20px 22px 20px;
   color:#fff;
   box-shadow:0 6px 18px rgba(0,0,0,0.5);
-  margin-top:auto;
-  margin-bottom:52px;
   position:relative;
   overflow:hidden;
 }
@@ -66,7 +64,6 @@ body{
 }
 .marquee-inner{
   display:inline-block;
-  /* panjang konten diisi beberapa kali agar tidak ada celah */
   animation:scroll 14s linear infinite;
 }
 .marquee-inner span{
@@ -82,11 +79,15 @@ body{
 }
 @keyframes scroll{
   from{ transform:translateX(0); }
-  to{ transform:translateX(-50%); } /* -50% works well with duplicated content */
+  to{ transform:translateX(-50%); }
 }
 
 /* Form */
-.login-box h2{ margin:6px 0 10px 0; font-size:20px; }
+.login-box h2{
+  margin:6px 0 14px 0;
+  font-size:20px;
+  text-align:center; /* Login ke tengah */
+}
 .login-box input{
   width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none;
   box-sizing:border-box;
@@ -99,10 +100,10 @@ body{
 }
 .login-box button:active{ transform:translateY(1px); }
 
-/* Small responsive tweak */
+/* Responsive tweak */
 @media (max-width:420px){
-  .welcome{ font-size:44px; letter-spacing:2px; margin-top:30px; }
-  .login-box{ width:88%; margin-bottom:36px; padding:14px; }
+  .welcome{ font-size:44px; letter-spacing:2px; margin-bottom:20px; }
+  .login-box{ width:88%; padding:14px; }
   .marquee-inner span{ font-size:15px; }
 }
 </style>
@@ -129,32 +130,20 @@ body{
 </div>
 
 <script>
-/* Debug helper (jika ada error, tulis ke console) */
-window.addEventListener('error', function(e){ console.error('JS Error:', e.message, 'at', e.lineno); });
-
-/* Jika ada sesi login tersisa, jangan auto-redirect di index.
-   Untuk melihat index setelah logout: buka console dan jalankan:
-     localStorage.removeItem('loggedIn');
-*/
 document.getElementById('btnLogin').addEventListener('click', function(){
   // contoh validasi sederhana (bisa kamu ganti)
-  // jika ingin username/password validasi, tambahkan di sini
   localStorage.setItem('loggedIn','true');
   // pindah ke menu
   window.location.href = 'menu.html';
 });
 
-/* OPTIONAL: jika marquee terlihat putus karena panjang, duplikasi konten otomatis (enforce)
-   ini memperpanjang isi marquee sehingga scrolling jadi mulus.
-*/
+// Duplikasi konten marquee supaya scrolling tidak putus
 (function makeMarqueeLong(){
   var m = document.getElementById('marq');
   if(!m) return;
-  // buat duplikasi sampai lebar inner > 2x container
   var containerWidth = m.parentElement.offsetWidth || window.innerWidth;
   while (m.scrollWidth < containerWidth * 2) {
     m.innerHTML += m.innerHTML;
-    // prevent infinite loop
     if(m.innerHTML.length > 20000) break;
   }
 })();
