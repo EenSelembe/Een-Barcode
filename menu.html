@@ -6,11 +6,12 @@
 <title>Menu - Een Barcode</title>
 <style>
 html, body {
-  margin:0; padding:0; height:100%; width:100%;
+  margin:0; padding:0;
+  height:100%; width:100%;
   font-family:Arial,sans-serif;
+  overflow: hidden; /* ⛔ cegah scroll */
 }
 body {
-  margin:0;
   height:100vh;
   background: url('anime3.jpg') no-repeat center center;
   background-size: cover;
@@ -18,6 +19,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 /* Tombol umum */
@@ -30,7 +32,10 @@ button {
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.2s, box-shadow 0.2s;
 }
-button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+}
 
 /* Tombol logout */
 #logoutBtn {
