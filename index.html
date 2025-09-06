@@ -2,213 +2,73 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Een Barcode App</title>
+  <title>Login - Een Barcode</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
+    body {
       font-family: Arial, sans-serif;
-    }
-
-    /* Halaman upload */
-    #uploadSection {
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      height: 100%;
-      background: url('anime.jpg') no-repeat center center fixed;
-      background-size: cover;
+      height: 100vh;
+      background: #f4f4f4;
+    }
+    .login-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
       text-align: center;
     }
-
-    .upload-btn {
-      font-size: 22px;
-      padding: 15px 30px;
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #ff512f, #dd2476);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin-bottom: 12px;
-    }
-
-    .upload-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    }
-
-    #csvFile {
-      display: none; /* sembunyikan input asli */
-    }
-
-    .info-text {
+      border-radius: 5px;
       color: white;
       font-size: 16px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    }
-
-    /* Halaman barcode fullscreen */
-    #barcodeSection {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      background: url('anime2.jpg') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-    }
-
-    #qrcode {
-      margin-bottom: 10px;
-    }
-
-    #qrcode canvas {
-      width: 80vw !important;
-      height: 80vw !important;
-    }
-
-    .barcode-number {
-      font-size: 22px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-      margin-bottom: 12px;
-    }
-
-    .checkboxes {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .checkboxes label {
-      font-size: 18px;
-      color: white;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 10px;
-      border-radius: 8px;
-    }
-
-    /* Tombol navigasi */
-    .navBtn {
-      position: absolute;
-      bottom: 30px;
-      background: rgba(255,255,255,0.7);
-      border: none;
-      padding: 15px;
-      border-radius: 50%;
-      font-size: 28px;
       cursor: pointer;
     }
-
-    #prevBtn { left: 30px; }
-    #nextBtn { right: 30px; }
+    button:hover {
+      background: #218838;
+    }
+    #error {
+      color: red;
+      display: none;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- Halaman Upload -->
-  <div id="uploadSection">
-    <label for="csvFile" class="upload-btn">📂 Masokan Datanye</label>
-    <input type="file" id="csvFile" accept=".csv">
-    <div class="info-text">Jage Mate Kau Toni Deni Meliat Bende nin</div>
+  <div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="error">Username atau password salah!</p>
   </div>
 
-  <!-- Halaman Barcode -->
-  <div id="barcodeSection">
-    <div id="qrcode"></div>
-    <div class="barcode-number" id="barcodeNumber"></div>
-    <div class="checkboxes">
-      <label><input type="checkbox" id="check1"> Cek 1</label>
-      <label><input type="checkbox" id="check2"> Cek 2</label>
-    </div>
-    <button id="prevBtn" class="navBtn">⬅</button>
-    <button id="nextBtn" class="navBtn">➡</button>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    let barcodes = [];
-    let currentIndex = 0;
-    let checks = {};
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
 
-    const uploadSection = document.getElementById('uploadSection');
-    const barcodeSection = document.getElementById('barcodeSection');
-    const qrcodeDiv = document.getElementById('qrcode');
-    const barcodeNumberDiv = document.getElementById('barcodeNumber');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const check1 = document.getElementById('check1');
-    const check2 = document.getElementById('check2');
-
-    document.getElementById('csvFile').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const lines = event.target.result.split(/\r?\n/).filter(line => line.trim() !== "");
-        barcodes = lines;
-        if (barcodes.length > 0) {
-          currentIndex = 0;
-          uploadSection.style.display = "none";
-          barcodeSection.style.display = "flex";
-          showBarcode(currentIndex);
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    function showBarcode(index) {
-      qrcodeDiv.innerHTML = "";
-      if (index < 0 || index >= barcodes.length) return;
-
-      new QRCode(qrcodeDiv, {
-        text: barcodes[index],
-        width: 600,
-        height: 600
-      });
-
-      // Nomor urut
-      barcodeNumberDiv.textContent = `#${index + 1}`;
-
-      // Update checkbox sesuai status sebelumnya
-      check1.checked = checks[index]?.check1 || false;
-      check2.checked = checks[index]?.check2 || false;
-    }
-
-    function saveCheck() {
-      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
-    }
-
-    check1.addEventListener("change", saveCheck);
-    check2.addEventListener("change", saveCheck);
-
-    nextBtn.addEventListener("click", () => {
-      saveCheck();
-      if (currentIndex < barcodes.length - 1) {
-        currentIndex++;
-        showBarcode(currentIndex);
+      if (user === "admin" && pass === "1234") {
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "home.html"; 
       } else {
-        alert("Ini barcode terakhir.");
+        document.getElementById("error").style.display = "block";
       }
-    });
-
-    prevBtn.addEventListener("click", () => {
-      saveCheck();
-      if (currentIndex > 0) {
-        currentIndex--;
-        showBarcode(currentIndex);
-      } else {
-        alert("Ini barcode pertama.");
-      }
-    });
+    }
   </script>
 </body>
 </html>
