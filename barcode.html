@@ -6,7 +6,7 @@
 <title>Barcode - Een Barcode Website</title>
 <style>
 html, body {
-  margin:0; padding:20px; height:100%; width:100%;
+  margin:0; padding:0; height:100%; width:100%;
   font-family:Arial,sans-serif; color:white; text-align:center;
   background: url('anime2.jpg') no-repeat center center fixed;
   background-size: cover;
@@ -22,8 +22,19 @@ html, body {
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
 
+/* Container tengah */
+.barcode-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 200px); /* sisakan ruang untuk tombol & warning */
+  box-sizing: border-box;
+  padding: 80px 20px 100px; /* kasih jarak atas dan bawah */
+}
+
 /* QR code */
-#qrcode { margin-top:100px; }
+#qrcode { margin-bottom:20px; }
 #qrcode canvas { width:80vw !important; height:80vw !important; }
 
 /* Nomor barcode */
@@ -92,9 +103,14 @@ html, body {
 <body>
 
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
-<div id="qrcode"></div>
-<div class="barcode-number" id="barcodeNumber"></div>
-<div class="checkboxes" id="checkboxContainer"></div>
+
+<!-- Konten barcode -->
+<div class="barcode-container">
+  <div id="qrcode"></div>
+  <div class="barcode-number" id="barcodeNumber"></div>
+  <div class="checkboxes" id="checkboxContainer"></div>
+</div>
+
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
