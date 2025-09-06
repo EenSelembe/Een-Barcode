@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Login - EEN BARCODE WEBSITE</title>
+
+  <!-- Favicon / Icon untuk browser -->
+  <link rel="icon" href="icon.png" type="image/png">
+
+  <!-- Icon untuk iPhone / iPad -->
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <!-- Manifest untuk Android / PWA -->
+  <link rel="manifest" href="manifest.json">
+
   <style>
     body {
       margin: 0;
@@ -163,7 +173,7 @@
 
       if(users[user] && users[user].password === pass){
         localStorage.setItem("loggedIn", "true"); // status login
-        localStorage.setItem("username", user);   // simpan username asli
+        localStorage.setItem("username", user);   // simpan username
         localStorage.setItem("currentUser", users[user].name); // simpan nama asli
         window.location.href = "menu.html";
       } else {
