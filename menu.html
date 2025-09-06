@@ -6,54 +6,67 @@
 <title>Menu - Een Barcode</title>
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  font-family: Arial, sans-serif;
+  margin:0; padding:0; height:100%; width:100%;
+  font-family:Arial,sans-serif;
 }
-
 body {
-  height: 100vh;
+  margin:0;
+  height:100vh;
   background: url('anime3.jpg') no-repeat center center;
   background-size: cover;
-}
-
-.container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  text-align: center;
 }
 
+/* Tombol umum */
 button {
-  width: 80%;
-  max-width: 250px;
-  padding: 15px;
-  margin: 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(135deg, #ff512f, #dd2476);
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  width:200px; padding:15px; margin:15px;
+  border:none; border-radius:8px;
+  font-size:18px; font-weight:bold; color:white;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.2s, box-shadow 0.2s;
 }
+button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+/* Tombol logout */
+#logoutBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: auto;
+  padding: 10px 15px;
+  background: linear-gradient(135deg,#36d1dc,#5b86e5);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#logoutBtn span {
+  font-size: 18px;
 }
 </style>
 </head>
 <body>
-  <div class="container">
-    <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
-    <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
-  </div>
+
+<!-- Tombol Logout -->
+<button id="logoutBtn" onclick="logout()">
+  <span>🚪</span> Logout
+</button>
+
+<!-- Menu utama -->
+<button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
+<button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+
+<script>
+function logout(){
+  // Arahkan kembali ke halaman login
+  window.location.href = "login.html";
+}
+</script>
+
 </body>
 </html>
