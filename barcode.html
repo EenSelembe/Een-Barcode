@@ -91,8 +91,20 @@ html, body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-#prevBtn { left: 20px; }
-#nextBtn { right: 20px; }
+#prevBtn {
+  position: absolute;
+  top: calc(45% + 220px); /* posisi tepat di bawah barcode */
+  left: 20px;             /* tepi kiri */
+  transform: translateY(0);
+}
+
+#nextBtn {
+  position: absolute;
+  top: calc(45% + 220px); /* posisi tepat di bawah barcode */
+  right: 20px;            /* tepi kanan */
+  transform: translateY(0);
+}
+
 </style>
 </head>
 <body>
