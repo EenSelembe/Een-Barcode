@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - Een Barcode</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: url('anime2.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      color: white;
+      font-size: 8vw;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      margin-bottom: 40px;
+    }
+
+    .menu-btn {
+      font-size: 22px;
+      padding: 15px 30px;
+      margin: 12px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 220px;
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 14px;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+  <h1>PILIH BAHAN BAKAR</h1>
+  <button class="menu-btn" onclick="goBarcode('solar')">🚀 BIOSOLAR</button>
+  <button class="menu-btn" onclick="goBarcode('pertalite')">⚡ PERTALITE</button>
+
+  <div class="footer">EEN BARCODE</div>
+
+  <script>
+    function goBarcode(type) {
+      // arahkan ke barcode.html dengan parameter
+      window.location.href = "barcode.html?type=" + type;
+    }
+  </script>
+</body>
+</html>
