@@ -120,10 +120,7 @@
   <div id="barcodeSection">
     <div id="qrcode"></div>
     <div class="barcode-number" id="barcodeNumber"></div>
-    <div class="checkboxes">
-      <label><input type="checkbox" id="check1"> Cek 1</label>
-      <label><input type="checkbox" id="check2"> Cek 2</label>
-    </div>
+    <div class="checkboxes" id="checkboxContainer"></div>
     <button id="prevBtn" class="navBtn">⬅</button>
     <button id="nextBtn" class="navBtn">➡</button>
   </div>
@@ -134,6 +131,7 @@
     let barcodes = [];
     let currentIndex = 0;
     let checks = {};
+    let mode = ""; // pertalite / biosolar
 
     const startSection = document.getElementById('startSection');
     const barcodeSection = document.getElementById('barcodeSection');
@@ -141,8 +139,7 @@
     const barcodeNumberDiv = document.getElementById('barcodeNumber');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const check1 = document.getElementById('check1');
-    const check2 = document.getElementById('check2');
+    const checkboxContainer = document.getElementById('checkboxContainer');
 
     async function loadCSV(filename) {
       try {
@@ -160,6 +157,20 @@
       }
     }
 
+    function renderCheckboxes() {
+      checkboxContainer.innerHTML = "";
+      if (mode === "pertalite") {
+        checkboxContainer.innerHTML = `
+          <label><input type="checkbox" id="check1"> Cek 1</label>
+        `;
+      } else if (mode === "biosolar") {
+        checkboxContainer.innerHTML = `
+          <label><input type="checkbox" id="check1"> Cek 1</label>
+          <label><input type="checkbox" id="check2"> Cek 2</label>
+        `;
+      }
+    }
+
     function showBarcode(index) {
       qrcodeDiv.innerHTML = "";
       if (index < 0 || index >= barcodes.length) return;
@@ -171,16 +182,26 @@
       });
 
       barcodeNumberDiv.textContent = `#${index + 1} - ${barcodes[index].nomor}`;
-      check1.checked = checks[index]?.check1 || false;
-      check2.checked = checks[index]?.check2 || false;
+
+      // restore checkbox state
+      const c1 = document.getElementById("check1");
+      const c2 = document.getElementById("check2");
+      c1 && (c1.checked = checks[index]?.check1 || false);
+      c2 && (c2.checked = checks[index]?.check2 || false);
+
+      // add event listener
+      c1 && c1.addEventListener("change", saveCheck);
+      c2 && c2.addEventListener("change", saveCheck);
     }
 
     function saveCheck() {
-      checks[currentIndex] = { check1: check1.checked, check2: check2.checked };
+      const c1 = document.getElementById("check1");
+      const c2 = document.getElementById("check2");
+      checks[currentIndex] = {
+        check1: c1 ? c1.checked : false,
+        check2: c2 ? c2.checked : false
+      };
     }
-
-    check1.addEventListener("change", saveCheck);
-    check2.addEventListener("change", saveCheck);
 
     nextBtn.addEventListener("click", () => {
       saveCheck();
@@ -202,12 +223,14 @@
       }
     });
 
-    function startBarcode(filename) {
+    function startBarcode(filename, selectedMode) {
+      mode = selectedMode;
       loadCSV(filename).then(() => {
         if (barcodes.length > 0) {
           startSection.style.display = "none";
           barcodeSection.style.display = "flex";
           currentIndex = 0;
+          renderCheckboxes();
           showBarcode(currentIndex);
         } else {
           alert("Data kosong atau gagal dimuat.");
@@ -216,11 +239,11 @@
     }
 
     document.getElementById("pertaliteBtn").addEventListener("click", () => {
-      startBarcode("datapertalite.csv");
+      startBarcode("datapertalite.csv", "pertalite");
     });
 
     document.getElementById("biosolarBtn").addEventListener("click", () => {
-      startBarcode("datasolar.csv");
+      startBarcode("datasolar.csv", "biosolar");
     });
   </script>
 </body>
