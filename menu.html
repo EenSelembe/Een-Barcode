@@ -2,17 +2,20 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" 
+<meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Menu - Een Barcode</title>
 <style>
 html, body {
-  margin:0; padding:0; height:100%; width:100%;
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  overflow:hidden;    /* kunci layar */
+  touch-action:none;  /* cegah geser di hp */
   font-family:Arial,sans-serif;
 }
 body {
-  margin:0;
-  height:100vh;
   background: url('anime3.jpg') no-repeat center center;
   background-size: cover;
   display: flex;
@@ -20,10 +23,17 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+/* Tombol umum */
 button {
-  width:200px; padding:15px; margin:15px;
-  border:none; border-radius:8px;
-  font-size:18px; font-weight:bold; color:white;
+  width:200px;
+  padding:15px;
+  margin:15px;
+  border:none;
+  border-radius:8px;
+  font-size:18px;
+  font-weight:bold;
+  color:white;
   background:linear-gradient(135deg,#ff512f,#dd2476);
   cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
@@ -33,6 +43,8 @@ button:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0,0,0,0.7);
 }
+
+/* Tombol logout */
 #logoutBtn {
   position: absolute;
   top: 15px;
@@ -52,10 +64,12 @@ button:hover {
 </head>
 <body>
 
+<!-- Tombol Logout -->
 <button id="logoutBtn" onclick="logout()">
   <span>🚪</span> Logout
 </button>
 
+<!-- Menu utama -->
 <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
 <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
 
@@ -64,11 +78,11 @@ button:hover {
 if(localStorage.getItem("loggedIn") !== "true"){
   window.location.href = "index.html";
 }
+
 function logout(){
   localStorage.removeItem("loggedIn");
   window.location.href = "index.html";
 }
 </script>
-
 </body>
 </html>
