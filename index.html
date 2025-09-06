@@ -48,20 +48,21 @@
       position: relative;
     }
 
-    /* Teks berjalan */
+    /* Teks berjalan tanpa putus */
     .marquee {
       background: rgba(255,255,255,0.1);
       padding: 8px;
       border-radius: 6px;
       margin-bottom: 20px;
       overflow: hidden;
-      white-space: nowrap;
       position: relative;
+      height: 30px;
     }
 
-    .marquee span {
+    .marquee-content {
       display: inline-block;
-      padding-left: 100%;
+      white-space: nowrap;
+      padding-right: 100%;
       animation: marquee 12s linear infinite;
       font-size: 18px;
       font-weight: bold;
@@ -69,12 +70,18 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       letter-spacing: 2px;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+      animation: marquee 12s linear infinite, neon 1.5s infinite alternate;
     }
 
     @keyframes marquee {
       0%   { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Efek glow neon */
+    @keyframes neon {
+      from { text-shadow: 0 0 5px #fff, 0 0 10px #ff0080, 0 0 20px #ff8c00; }
+      to   { text-shadow: 0 0 10px #fff, 0 0 20px #40e0d0, 0 0 30px #ff0080; }
     }
 
     /* Input login */
@@ -124,7 +131,11 @@
 
   <!-- Kotak login -->
   <div class="login-box">
-    <div class="marquee"><span>EEN BARCODE WEBSITE</span></div>
+    <div class="marquee">
+      <div class="marquee-content">
+        EEN BARCODE WEBSITE • EEN BARCODE WEBSITE • EEN BARCODE WEBSITE • EEN BARCODE WEBSITE •
+      </div>
+    </div>
     <input type="text" id="username" placeholder="Username">
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
