@@ -1,6 +1,6 @@
-self.addEventListener('install', (event)=>{
+self.addEventListener('install', event=>{
   event.waitUntil(
-    caches.open('een-barcode-cache').then((cache)=>{
+    caches.open('een-barcode-cache').then(cache=>{
       return cache.addAll([
         '/',
         '/index.html',
@@ -16,9 +16,9 @@ self.addEventListener('install', (event)=>{
   );
 });
 
-self.addEventListener('fetch', (event)=>{
+self.addEventListener('fetch', event=>{
   event.respondWith(
-    caches.match(event.request).then((response)=>{
+    caches.match(event.request).then(response=>{
       return response || fetch(event.request);
     })
   );
