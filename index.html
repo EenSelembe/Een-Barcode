@@ -111,7 +111,8 @@
 <body>
   <!-- Halaman Awal -->
   <div id="startSection">
-    <button class="start-btn" id="startBtn">🚀 BIOSOLAR</button>
+    <button class="start-btn" id="pertaliteBtn">🚀 PERTALITE</button>
+    <button class="start-btn" id="biosolarBtn">🚀 BIOSOLAR</button>
     <div class="info-text">Tolong Jangan Disebarkan Barcode Ini</div>
   </div>
 
@@ -143,9 +144,9 @@
     const check1 = document.getElementById('check1');
     const check2 = document.getElementById('check2');
 
-    async function loadCSV() {
+    async function loadCSV(filename) {
       try {
-        const response = await fetch("datasolar.csv");
+        const response = await fetch(filename);
         const text = await response.text();
         const rows = text.trim().split(/\r?\n/).slice(1); // skip header
 
@@ -154,7 +155,7 @@
           return { kode: cols[0].trim(), nomor: cols[1]?.trim() || "" };
         });
       } catch (err) {
-        alert("Gagal memuat datasolar.csv");
+        alert("Gagal memuat " + filename);
         console.error(err);
       }
     }
@@ -201,18 +202,26 @@
       }
     });
 
-    document.getElementById("startBtn").addEventListener("click", () => {
-      if (barcodes.length > 0) {
-        startSection.style.display = "none";
-        barcodeSection.style.display = "flex";
-        currentIndex = 0;
-        showBarcode(currentIndex);
-      } else {
-        alert("Data kosong atau gagal dimuat.");
-      }
+    function startBarcode(filename) {
+      loadCSV(filename).then(() => {
+        if (barcodes.length > 0) {
+          startSection.style.display = "none";
+          barcodeSection.style.display = "flex";
+          currentIndex = 0;
+          showBarcode(currentIndex);
+        } else {
+          alert("Data kosong atau gagal dimuat.");
+        }
+      });
+    }
+
+    document.getElementById("pertaliteBtn").addEventListener("click", () => {
+      startBarcode("datapertalite.csv");
     });
 
-    loadCSV();
+    document.getElementById("biosolarBtn").addEventListener("click", () => {
+      startBarcode("datasolar.csv");
+    });
   </script>
 </body>
 </html>
