@@ -2,14 +2,18 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<!-- Kunci layar agar tidak bisa di-zoom -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Menu - EEN BARCODE WEBSITE</title>
 <style>
+/* Atur dasar halaman */
 html, body {
   margin:0; padding:0; height:100%; width:100%;
   font-family:Arial,sans-serif;
   overflow:hidden; /* kunci supaya layar tidak bisa digeser */
 }
+
+/* Background & layout */
 body {
   margin:0;
   height:100vh;
@@ -34,7 +38,7 @@ button {
 }
 button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 
-/* Tombol logout */
+/* Tombol logout (pojok kanan atas) */
 #logoutBtn {
   position: absolute;
   top: 15px;
@@ -53,14 +57,14 @@ button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 
 /* Teks instruksi */
 .instruction {
-  font-size: 28px;
-  font-weight: 900;
-  text-align: center;
-  margin: 20px 0;
-  line-height: 1.4;
-  color: #fff;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-  letter-spacing: 2px;
+  font-size: 28px;           /* lebih besar */
+  font-weight: 900;          /* sangat tebal */
+  text-align: center;        /* rata tengah */
+  margin: 20px 0;            /* jarak atas-bawah */
+  line-height: 1.4;          /* jarak antar baris */
+  color: #fff;               /* putih agar kontras */
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8); /* bayangan agar jelas */
+  letter-spacing: 2px;       /* jarak antar huruf */
 }
 </style>
 </head>
@@ -83,16 +87,20 @@ button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
 
 <script>
-// Logout dan cegah kembali ke menu tanpa login
+/* === SCRIPT BAGIAN LOGIN/LOGOUT === */
+
+/* Logout dan arahkan ke index.html */
 function logout(){
-  localStorage.removeItem("loggedInUser"); // hapus sesi
-  window.location.href = "index.html";
+  localStorage.removeItem("loggedInUser"); // hapus sesi login
+  window.location.href = "index.html";     // balik ke login
 }
 
-// Cegah tombol back HP
+/* === SCRIPT CEGAH TOMBOL BACK HP === */
+
+/* Trik pushState supaya tombol back tidak bisa kembali */
 history.pushState(null, null, location.href);
 window.onpopstate = function () {
-  history.go(1);
+  history.go(1); // paksa maju lagi kalau user tekan tombol back
 };
 </script>
 
