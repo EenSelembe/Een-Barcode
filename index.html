@@ -19,24 +19,31 @@ body{
 }
 
 /* SELAMAT DATANG besar */
-.welcome{
-  text-align:center;
-  font-size:60px;
-  font-weight:700;
-  line-height:1.0;
-  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:glow 2s infinite alternate, fadeIn 1.6s ease;
-  text-transform:uppercase;
-  letter-spacing:4px;
-  text-shadow:2px 2px 8px rgba(0,0,0,0.6);
-  margin-bottom:30px;
+.welcome {
+  position: absolute;       /* biar bisa ditempatkan bebas */
+  top: 20px;                /* jarak dari atas layar */
+  left: 50%;                /* tengah horizontal */
+  transform: translateX(-50%);
+  text-align: center;
+
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.0;
+  background: linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 2s infinite alternate, fadeIn 1.6s ease;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  margin: 0; /* hapus margin bawah biar rapih */
 }
+      
 @keyframes glow{
   from{ text-shadow:0 0 10px #ff0080,0 0 20px #ff8c00; }
   to{ text-shadow:0 0 20px #40e0d0,0 0 30px #ff0080; }
 }
+      
 @keyframes fadeIn{
   from{ opacity:0; transform:translateY(-30px); }
   to{ opacity:1; transform:translateY(0); }
