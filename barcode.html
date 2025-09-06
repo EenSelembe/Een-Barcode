@@ -2,40 +2,42 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Barcode - Een Barcode</title>
 <style>
 html, body {
-  margin:0;
-  padding:0;
-  height:100%;
-  width:100%;
-  overflow:hidden;    /* kunci layar */
-  touch-action:none;  /* cegah geser */
-  font-family:Arial,sans-serif;
-  color:white;
-  text-align:center;
+  margin:0; padding:0; height:100%; width:100%;
+  overflow:hidden;       /* kunci layar agar tidak bisa scroll */
+  touch-action:none;     /* cegah geser */
+  font-family:Arial,sans-serif; color:white; text-align:center;
   background: url('anime2.jpg') no-repeat center center;
   background-size: cover;
 }
+
+/* Tombol kembali */
 #topButton {
-  position:absolute;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:12px 25px;
-  font-weight:bold;
-  font-size:18px;
-  border:none;
-  border-radius:8px;
-  background:linear-gradient(135deg,#36d1dc,#5b86e5);
-  color:white;
-  cursor:pointer;
+  position:absolute; top:20px; left:50%; transform:translateX(-50%);
+  padding:12px 25px; font-weight:bold; font-size:18px; border:none;
+  border-radius:8px; background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white; cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
-#qrcode { margin-top:80px; }
-#qrcode canvas { width:80vw !important; height:80vw !important; }
+
+/* Konten utama di tengah layar */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* pusat vertikal */
+  align-items: center;     /* pusat horizontal */
+  height: 100%;            /* isi penuh layar */
+}
+#qrcode {
+  margin: 20px 0;
+}
+#qrcode canvas {
+  width:80vw !important;
+  height:80vw !important;
+}
 .barcode-number {
   font-size:22px;
   font-weight:bold;
@@ -46,7 +48,7 @@ html, body {
   display:flex;
   gap:20px;
   justify-content:center;
-  margin-bottom:20px;
+  margin-top:10px;
 }
 .checkboxes label {
   font-size:18px;
@@ -55,9 +57,11 @@ html, body {
   padding:5px 10px;
   border-radius:8px;
 }
+
+/* Tombol navigasi */
 .navBtn {
   position:absolute;
-  bottom:120px;  /* dekat dengan barcode */
+  bottom:80px;
   background: rgba(255,255,255,0.7);
   border:none;
   padding:15px;
@@ -72,9 +76,13 @@ html, body {
 <body>
 
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
-<div id="qrcode"></div>
-<div class="barcode-number" id="barcodeNumber"></div>
-<div class="checkboxes" id="checkboxContainer"></div>
+
+<div class="main-content">
+  <div id="qrcode"></div>
+  <div class="barcode-number" id="barcodeNumber"></div>
+  <div class="checkboxes" id="checkboxContainer"></div>
+</div>
+
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
@@ -82,7 +90,7 @@ html, body {
 <script>
 // Cek login
 if(localStorage.getItem("loggedIn") !== "true"){
-  window.location.href = "index.html";
+  window.location.replace("index.html");
 }
 
 let barcodes=[], currentIndex=0, checks={};
@@ -112,9 +120,7 @@ function showBarcode(index){
 
   checkboxContainer.innerHTML="";
   if(type==="solar"){
-    checkboxContainer.innerHTML = `
-      <label><input type="checkbox" id="check1"> Cek 1</label>
-      <label><input type="checkbox" id="check2"> Cek 2</label>`;
+    checkboxContainer.innerHTML = `<label><input type="checkbox" id="check1"> Cek 1</label><label><input type="checkbox" id="check2"> Cek 2</label>`;
     document.getElementById("check1").checked = checks[index]?.check1 || false;
     document.getElementById("check2").checked = checks[index]?.check2 || false;
     document.getElementById("check1").addEventListener("change",()=>saveCheck(index));
