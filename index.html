@@ -2,289 +2,119 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" 
+<meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Login - Een Barcode</title>
 <style>
-html, body {
-  margin:0; padding:0;
-  height:100%; width:100%;
-  font-family:Arial,sans-serif;
-  overflow: hidden; /* cegah scroll */
-}
-body {
+/* Reset & layout */
+html,body{margin:0;padding:0;height:100%;width:100%;font-family:Arial, sans-serif;overflow:hidden;}
+body{
   height:100vh;
-  background: url('anime.jpg') no-repeat center center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
+  background:url('anime.jpg') no-repeat center center;
+  background-size:cover;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
 }
 
-/* Tulisan Selamat Datang */
-.welcome {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 60px;
-  font-weight: bold;
-  line-height: 1.2;
-  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glow 2s infinite alternate, fadeIn 2s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+/* SELAMAT DATANG besar */
+.welcome{
+  margin-top:40px;
+  text-align:center;
+  font-size:60px;
+  font-weight:700;
+  line-height:1.0;
+  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glow 2s infinite alternate, fadeIn 1.6s ease;
+  text-transform:uppercase;
+  letter-spacing:4px;
+  text-shadow:2px 2px 8px rgba(0,0,0,0.6);
 }
-@keyframes glow {
-  from { text-shadow: 0 0 10px #ff0080, 0 0 20px #ff8c00, 0 0 30px #40e0d0; }
-  to   { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff0080, 0 0 40px #ff8c00; }
+@keyframes glow{
+  from{ text-shadow:0 0 10px #ff0080,0 0 20px #ff8c00; }
+  to{ text-shadow:0 0 20px #40e0d0,0 0 30px #ff0080; }
 }
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-50px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Kotak login */
-.login-box {
-  background: rgba(0,0,0,0.7);
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  width: 320px;
-  margin-top: auto;
-  margin-bottom: 60px;
-  position: relative;
-  overflow: hidden;
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(-30px); }
+  to{ opacity:1; transform:translateY(0); }
 }
 
-/* Marquee teks berjalan dalam kotak */
-.marquee {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  margin-bottom: 15px;
-  position: relative;
-}
-.marquee-content {
-  display: inline-block;
-  padding-right: 100%;
-  animation: scrollLeft 15s linear infinite;
-}
-.marquee span {
-  font-size: 18px;
-  font-weight: bold;
-  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 8px rgba(255,255,255,0.6);
-  animation: glowMarquee 2s ease-in-out infinite alternate;
-  margin-right: 50px;
-}
-@keyframes scrollLeft {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
-}
-@keyframes glowMarquee {
-  from { text-shadow: 0 0 8px #ff0080, 0 0 16px #ff8c00, 0 0 24px #40e0d0; }
-  to   { text-shadow: 0 0 16px #40e0d0, 0 0 24px #ff0080, 0 0 32px #ff8c00; }
+/* Kotak login (dengan marquee di dalam) */
+.login-box{
+  background:rgba(0,0,0,0.72);
+  width:320px;
+  border-radius:12px;
+  padding:18px 20px 22px 20px;
+  color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  margin-top:auto;
+  margin-bottom:52px;
+  position:relative;
+  overflow:hidden;
 }
 
-.login-box h2 {
-  margin-bottom: 20px;
+/* Marquee di dalam kotak, mulus & tidak putus */
+.marquee{
+  width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  box-sizing:border-box;
+  margin-bottom:12px;
 }
-.login-box input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
+.marquee-inner{
+  display:inline-block;
+  /* panjang konten diisi beberapa kali agar tidak ada celah */
+  animation:scroll 14s linear infinite;
 }
-.login-box button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(135deg,#36d1dc,#5b86e5);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+.marquee-inner span{
+  display:inline-block;
+  margin-right:40px;
+  font-size:16px;
+  font-weight:700;
+  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 8px rgba(255,255,255,0.35);
+  vertical-align:middle;
 }
-.login-box button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+@keyframes scroll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); } /* -50% works well with duplicated content */
+}
+
+/* Form */
+.login-box h2{ margin:6px 0 10px 0; font-size:20px; }
+.login-box input{
+  width:100%; padding:10px; margin:8px 0; border-radius:8px; border:none;
+  box-sizing:border-box;
+}
+.login-box button{
+  width:100%; padding:12px; margin-top:10px; border-radius:8px; border:none;
+  font-weight:700; background:linear-gradient(135deg,#36d1dc,#5b86e5); color:#fff;
+  cursor:pointer;
+  box-shadow:0 6px 14px rgba(0,0,0,0.35);
+}
+.login-box button:active{ transform:translateY(1px); }
+
+/* Small responsive tweak */
+@media (max-width:420px){
+  .welcome{ font-size:44px; letter-spacing:2px; margin-top:30px; }
+  .login-box{ width:88%; margin-bottom:36px; padding:14px; }
+  .marquee-inner span{ font-size:15px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Tulisan besar -->
-<div class="welcome">
-  SELAMAT<br>DATANG
-</div>
-
-<!-- Kotak login -->
-<div class="login-box">
-  <!-- Teks berjalan di dalam kotak -->
-  <div class="marquee"><!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" 
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Login - Een Barcode</title>
-<style>
-html, body {
-  margin:0; padding:0;
-  height:100%; width:100%;
-  font-family:Arial,sans-serif;
-  overflow: hidden;
-}
-body {
-  height:100vh;
-  background: url('anime.jpg') no-repeat center center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-}
-.welcome {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 60px;
-  font-weight: bold;
-  line-height: 1.2;
-  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: glow 2s infinite alternate, fadeIn 2s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-}
-@keyframes glow {
-  from { text-shadow: 0 0 10px #ff0080, 0 0 20px #ff8c00, 0 0 30px #40e0d0; }
-  to   { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff0080, 0 0 40px #ff8c00; }
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-50px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.login-box {
-  background: rgba(0,0,0,0.7);
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  width: 320px;
-  margin-top: auto;
-  margin-bottom: 60px;
-  position: relative;
-  overflow: hidden;
-}
-.marquee {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  margin-bottom: 15px;
-  position: relative;
-}
-.marquee-content {
-  display: inline-block;
-  padding-right: 100%;
-  animation: scrollLeft 15s linear infinite;
-}
-.marquee span {
-  font-size: 18px;
-  font-weight: bold;
-  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 8px rgba(255,255,255,0.6);
-  animation: glowMarquee 2s ease-in-out infinite alternate;
-  margin-right: 50px;
-}
-@keyframes scrollLeft {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
-}
-@keyframes glowMarquee {
-  from { text-shadow: 0 0 8px #ff0080, 0 0 16px #ff8c00, 0 0 24px #40e0d0; }
-  to   { text-shadow: 0 0 16px #40e0d0, 0 0 24px #ff0080, 0 0 32px #ff8c00; }
-}
-.login-box h2 {
-  margin-bottom: 20px;
-}
-.login-box input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 8px;
-}
-.login-box button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(135deg,#36d1dc,#5b86e5);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.login-box button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
-}
-</style>
-</head>
-<body>
-
-<div class="welcome">
-  SELAMAT<br>DATANG
-</div>
+<div class="welcome">SELAMAT<br>DATANG</div>
 
 <div class="login-box">
-  <div class="marquee">
-    <div class="marquee-content">
-      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-    </div>
-  </div>
-
-  <h2>Login</h2>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Masuk</button>
-</div>
-
-<script>
-function login(){
-  // Simpan status login
-  localStorage.setItem("loggedIn", "true");
-  // Arahkan ke menu
-  window.location.href = "menu.html";
-}
-</script>
-
-</body>
-</html>
-
-    <div class="marquee-content">
+  <!-- marquee: duplikat konten supaya tidak ada jeda -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-inner" id="marq">
       <span>🌟 EEN BARCODE WEBSITE 🌟</span>
       <span>🌟 EEN BARCODE WEBSITE 🌟</span>
       <span>🌟 EEN BARCODE WEBSITE 🌟</span>
@@ -293,16 +123,41 @@ function login(){
   </div>
 
   <h2>Login</h2>
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Masuk</button>
+  <input id="username" type="text" placeholder="Username" autocomplete="username">
+  <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+  <button id="btnLogin">Masuk</button>
 </div>
 
 <script>
-function login(){
-  window.location.href = "menu.html";
-}
-</script>
+/* Debug helper (jika ada error, tulis ke console) */
+window.addEventListener('error', function(e){ console.error('JS Error:', e.message, 'at', e.lineno); });
 
+/* Jika ada sesi login tersisa, jangan auto-redirect di index.
+   Untuk melihat index setelah logout: buka console dan jalankan:
+     localStorage.removeItem('loggedIn');
+*/
+document.getElementById('btnLogin').addEventListener('click', function(){
+  // contoh validasi sederhana (bisa kamu ganti)
+  // jika ingin username/password validasi, tambahkan di sini
+  localStorage.setItem('loggedIn','true');
+  // pindah ke menu
+  window.location.href = 'menu.html';
+});
+
+/* OPTIONAL: jika marquee terlihat putus karena panjang, duplikasi konten otomatis (enforce)
+   ini memperpanjang isi marquee sehingga scrolling jadi mulus.
+*/
+(function makeMarqueeLong(){
+  var m = document.getElementById('marq');
+  if(!m) return;
+  // buat duplikasi sampai lebar inner > 2x container
+  var containerWidth = m.parentElement.offsetWidth || window.innerWidth;
+  while (m.scrollWidth < containerWidth * 2) {
+    m.innerHTML += m.innerHTML;
+    // prevent infinite loop
+    if(m.innerHTML.length > 20000) break;
+  }
+})();
+</script>
 </body>
 </html>
