@@ -28,7 +28,7 @@ html, body {
   color:white; 
   cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
-  z-index:9999;   /* supaya tidak ketutup QR code */
+  z-index:9999;
 }
 
 /* Kontainer barcode */
@@ -39,7 +39,7 @@ html, body {
   align-items:center;
   justify-content:flex-start;
   height:100vh;
-  padding-top:180px;  /* Turunkan barcode */
+  padding-top:180px;
   box-sizing:border-box;
 }
 
@@ -74,14 +74,15 @@ html, body {
 /* Tombol navigasi */
 .navBtn {
   position:absolute;
-  top:50%;
+  top:60%; /* sebelumnya 50%, diturunkan */
   transform:translateY(-50%);
   background: rgba(255,255,255,0.7);
   border:none;
-  padding:15px;
+  padding:20px; /* lebih besar */
   border-radius:50%;
-  font-size:28px;
+  font-size:36px; /* panah lebih besar */
   cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
 }
 #prevBtn { left:20px; }
 #nextBtn { right:20px; }
