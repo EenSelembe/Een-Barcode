@@ -47,28 +47,43 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Marquee teks berjalan */
+/* Kotak login */
+.login-box {
+  background: rgba(0,0,0,0.7);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  width: 320px;
+  margin-top: auto;
+  margin-bottom: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Marquee teks berjalan dalam kotak */
 .marquee {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  margin: 10px 0 15px 0; /* lebih dekat ke login */
+  margin-bottom: 15px;
   position: relative;
 }
 .marquee-content {
   display: inline-block;
-  padding-right: 100%; /* beri jarak agar mulus */
+  padding-right: 100%;
   animation: scrollLeft 15s linear infinite;
 }
 .marquee span {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: bold;
   background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 8px rgba(255,255,255,0.6);
   animation: glowMarquee 2s ease-in-out infinite alternate;
-  margin-right: 50px; /* jarak antar duplikasi */
+  margin-right: 50px;
 }
 @keyframes scrollLeft {
   from { transform: translateX(0); }
@@ -79,18 +94,6 @@ body {
   to   { text-shadow: 0 0 16px #40e0d0, 0 0 24px #ff0080, 0 0 32px #ff8c00; }
 }
 
-/* Kotak login */
-.login-box {
-  background: rgba(0,0,0,0.6);
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  width: 300px;
-  margin-top: auto;
-  margin-bottom: 60px;
-}
 .login-box h2 {
   margin-bottom: 20px;
 }
@@ -127,19 +130,18 @@ body {
   SELAMAT<br>DATANG
 </div>
 
-<!-- Teks berjalan -->
-<div class="marquee">
-  <div class="marquee-content">
-    <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-    <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-    <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-    <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-    <span>🌟 EEN BARCODE WEBSITE 🌟</span>
-  </div>
-</div>
-
 <!-- Kotak login -->
 <div class="login-box">
+  <!-- Teks berjalan di dalam kotak -->
+  <div class="marquee">
+    <div class="marquee-content">
+      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
+      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
+      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
+      <span>🌟 EEN BARCODE WEBSITE 🌟</span>
+    </div>
+  </div>
+
   <h2>Login</h2>
   <input type="text" id="username" placeholder="Username">
   <input type="password" id="password" placeholder="Password">
