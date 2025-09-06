@@ -2,110 +2,69 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Een Barcode QR</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Een Barcode</title>
   <style>
     body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
       font-family: Arial, sans-serif;
     }
-
-    /* Halaman awal */
-    #startSection {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100%;
-      background: url('anime.jpg') no-repeat center center fixed;
-      background-size: cover;
-      text-align: center;
+    #startSection, #barcodeSection {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background-size: cover; background-position: center;
     }
+    #startSection { background-image: url("anime.jpg"); }
+    #barcodeSection { background-image: url("anime2.jpg"); display: none; }
 
     .start-btn {
-      font-size: 22px;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #ff512f, #dd2476);
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin-bottom: 12px;
-    }
-
-    .start-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    }
-
-    .info-text {
-      color: white;
-      font-size: 16px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    }
-
-    /* Halaman barcode fullscreen */
-    #barcodeSection {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      background: url('anime2.jpg') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-    }
-
-    #qrcode {
-      margin-bottom: 10px;
-    }
-
-    #qrcode canvas {
-      width: 80vw !important;
-      height: 80vw !important;
-    }
-
-    .barcode-number {
-      font-size: 22px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-      margin-bottom: 12px;
-    }
-
-    .checkboxes {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .checkboxes label {
+      padding: 15px 25px;
+      margin: 10px;
       font-size: 18px;
-      color: white;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #ff9800;
+      color: #fff;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .info-text {
+      margin-top: 20px;
+      color: red;
+      font-weight: bold;
+      background: rgba(255,255,255,0.7);
+      padding: 8px 12px;
       border-radius: 8px;
     }
-
-    /* Tombol navigasi */
-    .navBtn {
-      position: absolute;
-      bottom: 30px;
-      background: rgba(255,255,255,0.7);
-      border: none;
-      padding: 15px;
-      border-radius: 50%;
-      font-size: 28px;
-      cursor: pointer;
+    #qrImage { margin: 20px; }
+    #nomorText {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 4px black;
     }
-
-    #prevBtn { left: 30px; }
-    #nextBtn { right: 30px; }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .controls button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #2196f3;
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    }
+    #checks {
+      margin-top: 15px;
+      background: rgba(255,255,255,0.8);
+      padding: 10px;
+      border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -118,119 +77,45 @@
 
   <!-- Halaman Barcode -->
   <div id="barcodeSection">
-    <div id="qrcode"></div>
-    <div class="barcode-number" id="barcodeNumber"></div>
-    <div class="checkboxes" id="checkboxContainer"></div>
-    <button id="prevBtn" class="navBtn">⬅</button>
-    <button id="nextBtn" class="navBtn">➡</button>
+    <div id="qrImage"></div>
+    <div id="nomorText"></div>
+    <div id="checks"></div>
+    <div class="controls">
+      <button id="btnPrev">⬅ Sebelumnya</button>
+      <button id="btnNext">➡ Berikutnya</button>
+      <button id="btnBack">🔙 Kembali</button>
+    </div>
   </div>
 
-  <!-- Library QRCode -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
   <script>
+    const startSection = document.getElementById("startSection");
+    const barcodeSection = document.getElementById("barcodeSection");
+    const qrImage = document.getElementById("qrImage");
+    const nomorText = document.getElementById("nomorText");
+    const checksDiv = document.getElementById("checks");
+
     let barcodes = [];
     let currentIndex = 0;
-    let checks = {};
-    let mode = ""; // pertalite / biosolar
-
-    const startSection = document.getElementById('startSection');
-    const barcodeSection = document.getElementById('barcodeSection');
-    const qrcodeDiv = document.getElementById('qrcode');
-    const barcodeNumberDiv = document.getElementById('barcodeNumber');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const checkboxContainer = document.getElementById('checkboxContainer');
+    let currentMode = ""; // "solar" atau "pertalite"
 
     async function loadCSV(filename) {
-      try {
-        const response = await fetch(filename);
-        const text = await response.text();
-        const rows = text.trim().split(/\r?\n/).slice(1); // skip header
-
-        barcodes = rows.map(row => {
-          const cols = row.split(",");
-          return { kode: cols[0].trim(), nomor: cols[1]?.trim() || "" };
-        });
-      } catch (err) {
-        alert("Gagal memuat " + filename);
-        console.error(err);
-      }
-    }
-
-    function renderCheckboxes() {
-      checkboxContainer.innerHTML = "";
-      if (mode === "pertalite") {
-        checkboxContainer.innerHTML = `
-          <label><input type="checkbox" id="check1"> Cek 1</label>
-        `;
-      } else if (mode === "biosolar") {
-        checkboxContainer.innerHTML = `
-          <label><input type="checkbox" id="check1"> Cek 1</label>
-          <label><input type="checkbox" id="check2"> Cek 2</label>
-        `;
-      }
-    }
-
-    function showBarcode(index) {
-      qrcodeDiv.innerHTML = "";
-      if (index < 0 || index >= barcodes.length) return;
-
-      new QRCode(qrcodeDiv, {
-        text: barcodes[index].kode,
-        width: 600,
-        height: 600
+      const response = await fetch(filename);
+      const text = await response.text();
+      const rows = text.trim().split("\n");
+      barcodes = rows.map(row => {
+        const [kode, nomor] = row.split(",");
+        return { kode, nomor };
       });
-
-      barcodeNumberDiv.textContent = `#${index + 1} - ${barcodes[index].nomor}`;
-
-      // restore checkbox state
-      const c1 = document.getElementById("check1");
-      const c2 = document.getElementById("check2");
-      c1 && (c1.checked = checks[index]?.check1 || false);
-      c2 && (c2.checked = checks[index]?.check2 || false);
-
-      // add event listener
-      c1 && c1.addEventListener("change", saveCheck);
-      c2 && c2.addEventListener("change", saveCheck);
     }
 
-    function saveCheck() {
-      const c1 = document.getElementById("check1");
-      const c2 = document.getElementById("check2");
-      checks[currentIndex] = {
-        check1: c1 ? c1.checked : false,
-        check2: c2 ? c2.checked : false
-      };
-    }
-
-    nextBtn.addEventListener("click", () => {
-      saveCheck();
-      if (currentIndex < barcodes.length - 1) {
-        currentIndex++;
-        showBarcode(currentIndex);
-      } else {
-        alert("Ini barcode terakhir.");
-      }
-    });
-
-    prevBtn.addEventListener("click", () => {
-      saveCheck();
-      if (currentIndex > 0) {
-        currentIndex--;
-        showBarcode(currentIndex);
-      } else {
-        alert("Ini barcode pertama.");
-      }
-    });
-
-    function startBarcode(filename, selectedMode) {
-      mode = selectedMode;
+    function startBarcode(filename, mode) {
       loadCSV(filename).then(() => {
         if (barcodes.length > 0) {
           startSection.style.display = "none";
           barcodeSection.style.display = "flex";
           currentIndex = 0;
-          renderCheckboxes();
+          currentMode = mode;
           showBarcode(currentIndex);
         } else {
           alert("Data kosong atau gagal dimuat.");
@@ -238,12 +123,54 @@
       });
     }
 
+    function showBarcode(index) {
+      qrImage.innerHTML = "";
+      const data = barcodes[index];
+      new QRCode(qrImage, {
+        text: data.kode,
+        width: 250,
+        height: 250
+      });
+      nomorText.innerText = data.nomor;
+
+      checksDiv.innerHTML = "";
+      if (currentMode === "solar") {
+        checksDiv.innerHTML = `
+          <label><input type="checkbox" id="check1"> Cek 1</label>
+          <label><input type="checkbox" id="check2"> Cek 2</label>
+        `;
+      } else if (currentMode === "pertalite") {
+        checksDiv.innerHTML = `
+          <label><input type="checkbox" id="check1"> Cek 1</label>
+        `;
+      }
+    }
+
     document.getElementById("pertaliteBtn").addEventListener("click", () => {
       startBarcode("datapertalite.csv", "pertalite");
     });
 
     document.getElementById("biosolarBtn").addEventListener("click", () => {
-      startBarcode("datasolar.csv", "biosolar");
+      startBarcode("datasolar.csv", "solar");
+    });
+
+    document.getElementById("btnPrev").addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showBarcode(currentIndex);
+      }
+    });
+
+    document.getElementById("btnNext").addEventListener("click", () => {
+      if (currentIndex < barcodes.length - 1) {
+        currentIndex++;
+        showBarcode(currentIndex);
+      }
+    });
+
+    document.getElementById("btnBack").addEventListener("click", () => {
+      barcodeSection.style.display = "none";
+      startSection.style.display = "flex";
     });
   </script>
 </body>
