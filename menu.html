@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Menu - Een Barcode</title>
 <style>
 html, body {
@@ -11,8 +10,8 @@ html, body {
   padding:0;
   height:100%;
   width:100%;
-  overflow:hidden;    /* kunci layar */
-  touch-action:none;  /* cegah geser di hp */
+  overflow:hidden;       /* kunci agar tidak bisa scroll */
+  touch-action:none;     /* cegah geser di layar sentuh */
   font-family:Arial,sans-serif;
 }
 body {
@@ -22,27 +21,20 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 /* Tombol umum */
 button {
-  width:200px;
-  padding:15px;
-  margin:15px;
-  border:none;
-  border-radius:8px;
-  font-size:18px;
-  font-weight:bold;
-  color:white;
+  width:200px; padding:15px; margin:15px;
+  border:none; border-radius:8px;
+  font-size:18px; font-weight:bold; color:white;
   background:linear-gradient(135deg,#ff512f,#dd2476);
   cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.2s, box-shadow 0.2s;
 }
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
-}
+button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 
 /* Tombol logout */
 #logoutBtn {
@@ -76,13 +68,19 @@ button:hover {
 <script>
 // Cek login
 if(localStorage.getItem("loggedIn") !== "true"){
-  window.location.href = "index.html";
+  window.location.replace("index.html");
 }
 
+// Logout aman
 function logout(){
   localStorage.removeItem("loggedIn");
-  window.location.href = "index.html";
+  window.location.replace("index.html");
+  window.history.pushState(null, "", "index.html");
+  window.onpopstate = function () {
+    window.location.replace("index.html");
+  };
 }
 </script>
+
 </body>
 </html>
