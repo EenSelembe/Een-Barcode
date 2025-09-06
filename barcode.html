@@ -5,51 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Barcode - Een Barcode</title>
 <style>
-html, body {
-  margin:0; padding:0; height:100%; width:100%;
-  font-family:Arial,sans-serif;
-}
 body {
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  background: url('anime2.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color:white;
-  text-shadow:1px 1px 3px black;
+  margin:0; padding:20px; text-align:center;
+  background:url('anime2.jpg') no-repeat center center fixed;
+  background-size:cover;
+  font-family:Arial, sans-serif; color:white;
 }
-#qrcode {
-  margin:20px; padding:20px;
-  background:white; border-radius:12px;
-}
+h1 { text-shadow:2px 2px 6px black; }
+#barcodeContainer { margin-top:20px; }
 button {
-  padding:12px 20px; border:none; border-radius:8px;
-  background:linear-gradient(135deg,#11998e,#38ef7d);
-  color:white; font-size:16px; font-weight:bold;
-  cursor:pointer; transition:0.2s;
+  margin:15px; padding:10px 20px;
+  border:none; border-radius:5px;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white; font-weight:bold; cursor:pointer;
 }
-button:hover { transform:scale(1.05); }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 </head>
 <body>
-<h2 id="judul"></h2>
-<div id="qrcode"></div>
-<button onclick="history.back()">Kembali</button>
+  <h1 id="title">Barcode</h1>
+  <div>
+    <button onclick="goBack()">⬅️ Kembali</button>
+  </div>
+  <div id="barcodeContainer"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
 <script>
-const params = new URLSearchParams(window.location.search);
-const type = params.get("type");
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
 
-let teks = "";
-if(type === "solar") teks = "Barcode Biosolar";
-else if(type === "pertalite") teks = "Barcode Pertalite";
-else teks = "Barcode Tidak Dikenal";
+function goBack(){
+  window.location.href="menu.html";
+}
 
-document.getElementById("judul").innerText = teks;
-new QRCode(document.getElementById("qrcode"), {
-  text: teks,
-  width: 200,
-  height: 200
-});
+const type = getParam("type");
+const file = (type==="pertalite") ? "datapertalite.csv" : "datasolar.csv";
+document.getElementById("title").innerText = "Barcode " + (type==="pertalite"?"Pertalite":"Biosolar");
+
+// baca CSV dan tampilkan barcode
+fetch(file)
+  .then(res => res.text())
+  .then(text => {
+    const lines = text.trim().split("\n");
+    lines.forEach((line,i)=>{
+      const qr = new QRious({ value: line, size: 180 });
+      const div = document.createElement("div");
+      div.innerHTML = `<p>Data ${i+1}</p>`;
+      div.appendChild(qr.image);
+      document.getElementById("barcodeContainer").appendChild(div);
+    });
+  });
 </script>
 </body>
 </html>
