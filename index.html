@@ -14,7 +14,8 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(to bottom, #222, #000);
+      background: url('anime.jpg') no-repeat center center fixed;
+      background-size: cover;
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
@@ -86,6 +87,7 @@
       }
       return false;
     }
+
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
     }
