@@ -141,13 +141,13 @@
   </div>
 
   <script>
-    // Daftar user & password (5 user)
+    // Daftar user & password + nama asli
     const users = {
-      "sokjago46": "anjingbaby1",
-      "black_Id185": "Abc890",
-      "user2": "pass2",
-      "user3": "pass3",
-      "user4": "pass4"
+      "sokjago46": { name: "Rendi", password: "anjingbaby1" },
+      "black_Id185": { name: "Budi", password: "Abc890" },
+      "user2": { name: "Siti", password: "pass2" },
+      "user3": { name: "Andi", password: "pass3" },
+      "user4": { name: "Dewi", password: "pass4" }
     };
 
     // Cegah tombol back
@@ -161,9 +161,10 @@
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
 
-      if(users[user] && users[user] === pass){
-        localStorage.setItem("loggedIn", "true"); // simpan status login
-        localStorage.setItem("username", user);   // simpan nama user
+      if(users[user] && users[user].password === pass){
+        localStorage.setItem("loggedIn", "true"); // status login
+        localStorage.setItem("username", user);   // simpan username asli
+        localStorage.setItem("currentUser", users[user].name); // simpan nama asli
         window.location.href = "menu.html";
       } else {
         alert("Username atau password salah!");
