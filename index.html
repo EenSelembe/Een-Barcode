@@ -2,73 +2,99 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Login - Een Barcode</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Een Barcode</title>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #f4f4f4;
-    }
-    .login-box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
       text-align: center;
+      margin: 20px;
     }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+    .barcode {
+      margin: 20px auto;
     }
     button {
-      width: 100%;
-      padding: 10px;
-      background: #28a745;
-      border: none;
-      border-radius: 5px;
-      color: white;
+      padding: 8px 16px;
+      margin: 10px;
       font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #007bff;
+      color: white;
       cursor: pointer;
     }
-    button:hover {
-      background: #218838;
-    }
-    #error {
-      color: red;
-      display: none;
-      margin-top: 10px;
+    button:disabled {
+      background: gray;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="error">Username atau password salah!</p>
+  <h2>📦 Data Barcode (Solar)</h2>
+
+  <div id="barcode-container" class="barcode"></div>
+
+  <div>
+    <button id="btnPrev">⬅ Prev</button>
+    <button id="btnNext">Next ➡</button>
   </div>
 
   <script>
-    function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+    let data = [];
+    let currentIndex = 0;
 
-      if (user === "admin" && pass === "1234") {
-        localStorage.setItem("isLoggedIn", "true");
-        window.location.href = "home.html"; 
-      } else {
-        document.getElementById("error").style.display = "block";
+    async function loadCSV() {
+      try {
+        const response = await fetch("datasolar.csv"); // disesuaikan
+        const text = await response.text();
+        const rows = text.trim().split("\n").slice(1); // lewati header
+
+        data = rows.map(row => {
+          const cols = row.split(",");
+          return { kode: cols[0].trim(), nomor: cols[1]?.trim() || "" };
+        });
+
+        if (data.length > 0) {
+          showBarcode(0);
+        }
+      } catch (err) {
+        document.getElementById("barcode-container").innerHTML =
+          "<p style='color:red'>Gagal memuat datasolar.csv</p>";
+        console.error(err);
       }
     }
+
+    function showBarcode(index) {
+      const container = document.getElementById("barcode-container");
+      container.innerHTML = `
+        <p><b>${data[index].nomor}</b></p>
+        <svg id="barcode"></svg>
+      `;
+      JsBarcode("#barcode", data[index].kode, {
+        format: "CODE128",
+        displayValue: true,
+        fontSize: 16
+      });
+
+      document.getElementById("btnPrev").disabled = index === 0;
+      document.getElementById("btnNext").disabled = index === data.length - 1;
+    }
+
+    document.getElementById("btnPrev").addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showBarcode(currentIndex);
+      }
+    });
+
+    document.getElementById("btnNext").addEventListener("click", () => {
+      if (currentIndex < data.length - 1) {
+        currentIndex++;
+        showBarcode(currentIndex);
+      }
+    });
+
+    loadCSV();
   </script>
 </body>
 </html>
