@@ -2,66 +2,27 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Menu - Een Barcode</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: Arial, sans-serif;
-  background: url('anime2.jpg') no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  overflow: hidden;
-  text-align: center;
-}
-
-h1 {
-  color: white;
-  font-size: 8vw;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-  margin-bottom: 40px;
-}
-
-.menu-btn {
-  font-size: 22px;
-  padding: 15px 30px;
-  margin: 12px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: 220px;
-}
-
-.menu-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-}
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 22px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #ffcc00, #ff6600);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 3px rgba(0,0,0,0.8), 0px 0px 5px rgba(255,200,0,0.7), 1px 1px 0px #ff9933;
-  letter-spacing: 3px;
-  padding-bottom: 18px;
-  z-index: 100;
-}
+html, body { margin:0; padding:0; height:100%; font-family:Arial,sans-serif;
+  background:url('anime2.jpg') no-repeat center center fixed; background-size:cover;
+  display:flex; justify-content:center; align-items:center; flex-direction:column; overflow:hidden; text-align:center;}
+h1 { color:white; font-size:8vw; text-shadow:2px 2px 4px rgba(0,0,0,0.8); margin-bottom:40px; }
+.menu-btn { font-size:22px; padding:15px 30px; margin:12px; border:none; border-radius:12px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff); color:white; font-weight:bold; cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:0.2s; width:220px;}
+.menu-btn:hover { transform:scale(1.05); box-shadow:0 6px 16px rgba(0,0,0,0.4); }
+.footer { position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  font-size:22px; font-weight:bold; background:linear-gradient(135deg,#ffcc00,#ff6600);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-shadow:2px 2px 3px rgba(0,0,0,0.8),0px 0px 5px rgba(255,200,0,0.7),1px 1px 0px #ff9933;
+  letter-spacing:3px; padding-bottom:18px; z-index:100;}
 </style>
 </head>
 <body>
@@ -71,17 +32,19 @@ h1 {
 <div class="footer">EEN BARCODE</div>
 
 <script>
-function goFullscreen() {
-  const el = document.documentElement;
+function goFullscreen(){
+  const el=document.documentElement;
   if(el.requestFullscreen) el.requestFullscreen();
   else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
   else if(el.msRequestFullscreen) el.msRequestFullscreen();
 }
 
-function goBarcode(type) {
-  goFullscreen(); // fullscreen saat pindah halaman
-  window.location.href = "barcode.html?type=" + type;
+function goBarcode(type){
+  goFullscreen();
+  window.location.href="barcode.html?type="+type;
 }
+
+window.addEventListener('load', goFullscreen);
 </script>
 </body>
 </html>
