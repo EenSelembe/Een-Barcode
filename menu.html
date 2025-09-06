@@ -7,12 +7,11 @@
 <title>Menu - Een Barcode</title>
 <style>
 html, body {
-  margin:0; padding:0;
-  height:100%; width:100%;
+  margin:0; padding:0; height:100%; width:100%;
   font-family:Arial,sans-serif;
-  overflow: hidden; /* ⛔ cegah scroll */
 }
 body {
+  margin:0;
   height:100vh;
   background: url('anime3.jpg') no-repeat center center;
   background-size: cover;
@@ -20,10 +19,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
 }
-
-/* Tombol umum */
 button {
   width:200px; padding:15px; margin:15px;
   border:none; border-radius:8px;
@@ -37,8 +33,6 @@ button:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0,0,0,0.7);
 }
-
-/* Tombol logout */
 #logoutBtn {
   position: absolute;
   top: 15px;
@@ -58,18 +52,20 @@ button:hover {
 </head>
 <body>
 
-<!-- Tombol Logout -->
 <button id="logoutBtn" onclick="logout()">
   <span>🚪</span> Logout
 </button>
 
-<!-- Menu utama -->
 <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
 <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
 
 <script>
+// Cek login
+if(localStorage.getItem("loggedIn") !== "true"){
+  window.location.href = "index.html";
+}
 function logout(){
-  // Arahkan kembali ke halaman login
+  localStorage.removeItem("loggedIn");
   window.location.href = "index.html";
 }
 </script>
