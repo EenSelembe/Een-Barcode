@@ -2,127 +2,103 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Een Barcode</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Barcode Viewer</title>
   <style>
-    body, html {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
       font-family: Arial, sans-serif;
-    }
-
-    /* Halaman awal */
-    #startSection {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100%;
       background: url('anime.jpg') no-repeat center center fixed;
       background-size: cover;
-      text-align: center;
+      height: 100vh;
+      overflow: hidden;
     }
-
+    #startSection {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      background: rgba(0,0,0,0.6);
+    }
     .start-btn {
-      font-size: 22px;
       padding: 15px 30px;
+      margin: 10px;
+      font-size: 20px;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #ff512f, #dd2476);
+      border-radius: 10px;
+      cursor: pointer;
+      background: #ff9800;
       color: white;
       font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-      margin-bottom: 12px;
     }
-
-    .start-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    }
-
     .info-text {
+      margin-top: 20px;
       color: white;
-      font-size: 16px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+      font-size: 18px;
+      font-weight: bold;
     }
-
-    /* Halaman barcode fullscreen */
     #barcodeSection {
       display: none;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      justify-content: flex-start;
-      height: 100%;
+      height: 100vh;
       background: url('anime2.jpg') no-repeat center center fixed;
       background-size: cover;
+      text-align: center;
+      color: white;
       position: relative;
-      padding-top: 60px; /* beri ruang atas */
     }
-
-    #qrcode {
-      margin-bottom: 10px;
-    }
-
-    #qrcode canvas {
-      width: 80vw !important;
-      height: 80vw !important;
-    }
-
-    .barcode-number {
-      font-size: 22px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-      margin-bottom: 12px;
-    }
-
-    .checkboxes {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .checkboxes label {
-      font-size: 18px;
-      color: white;
-      background: rgba(0,0,0,0.5);
-      padding: 5px 10px;
-      border-radius: 8px;
-    }
-
-    /* Tombol navigasi */
-    .navBtn {
-      position: absolute;
-      bottom: 30px;
-      background: rgba(255,255,255,0.7);
-      border: none;
-      padding: 15px;
-      border-radius: 50%;
-      font-size: 28px;
-      cursor: pointer;
-    }
-
-    #prevBtn { left: 30px; }
-    #nextBtn { right: 30px; }
-
-    /* Tombol kembali di atas tengah */
     #backBtn {
-      background: rgba(255,255,255,0.85);
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
       font-size: 16px;
-      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: red;
+      color: white;
       font-weight: bold;
-      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    #qrImage {
+      margin: 20px auto;
+      display: block;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    #nomorText {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    .checkbox-container {
+      margin: 10px;
+    }
+    #controls {
+      margin-top: 20px;
+    }
+    #controls button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #2196f3;
+      color: white;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <!-- Halaman Awal -->
+  <!-- Menu Awal -->
   <div id="startSection">
     <button class="start-btn" id="pertaliteBtn">🚀 PERTALITE</button>
     <button class="start-btn" id="biosolarBtn">🚀 BIOSOLAR</button>
@@ -131,72 +107,107 @@
 
   <!-- Halaman Barcode -->
   <div id="barcodeSection">
-    <button id="backBtn">🔙 Kembali</button>
-    <div id="qrcode"></div>
-    <div class="barcode-number" id="barcodeNumber"></div>
-    <div class="checkboxes" id="checkboxes"></div>
-    <button id="prevBtn" class="navBtn">⬅</button>
-    <button id="nextBtn" class="navBtn">➡</button>
+    <button id="backBtn">⬅ Kembali</button>
+    <canvas id="qrImage"></canvas>
+    <div id="nomorText"></div>
+    <div id="checkboxes"></div>
+    <div id="controls">
+      <button id="btnPrev">⬅ Sebelumnya</button>
+      <button id="btnNext">➡ Selanjutnya</button>
+    </div>
   </div>
 
-  <!-- Library QRCode -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- QRCode Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
   <script>
     let barcodes = [];
     let currentIndex = 0;
-    let currentMode = "";
+    let barcodeSection = document.getElementById("barcodeSection");
+    let startSection = document.getElementById("startSection");
+    let qrImage = document.getElementById("qrImage");
+    let nomorText = document.getElementById("nomorText");
+    let checkboxesDiv = document.getElementById("checkboxes");
+    let datasetType = ""; // pertalite atau biosolar
 
-    const startSection = document.getElementById('startSection');
-    const barcodeSection = document.getElementById('barcodeSection');
-    const qrcodeDiv = document.getElementById('qrcode');
-    const barcodeNumberDiv = document.getElementById('barcodeNumber');
-    const checkboxesDiv = document.getElementById('checkboxes');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const backBtn = document.getElementById('backBtn');
+    // Fullscreen
+    function openFullscreen() {
+      let elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
+    }
 
-    async function loadCSV(filename) {
-      const response = await fetch(filename);
+    // Load CSV
+    async function loadCSV(file) {
+      const response = await fetch(file);
       const text = await response.text();
-      const rows = text.trim().split(/\r?\n/).slice(1);
-      barcodes = rows.map(row => {
-        const cols = row.split(",");
-        return { kode: cols[0].trim(), nomor: cols[1]?.trim() || "" };
+      const rows = text.trim().split("\n");
+      barcodes = rows.map((row, index) => {
+        return { kode: row.trim(), nomor: index + 1, checked: {} };
       });
     }
 
+    // Tampilkan Barcode
     function showBarcode(index) {
-      qrcodeDiv.innerHTML = "";
-      if (index < 0 || index >= barcodes.length) return;
+      let barcode = barcodes[index];
+      if (!barcode) return;
 
-      new QRCode(qrcodeDiv, {
-        text: barcodes[index].kode,
-        width: 600,
-        height: 600
+      QRCode.toCanvas(qrImage, barcode.kode, { width: 250 }, function (error) {
+        if (error) console.error(error);
       });
 
-      barcodeNumberDiv.textContent = `#${index + 1} - ${barcodes[index].nomor}`;
+      nomorText.textContent = "Nomor: " + barcode.nomor;
 
+      // Checkbox
       checkboxesDiv.innerHTML = "";
-      if (currentMode === "solar") {
+      if (datasetType === "biosolar") {
+        // 2 ceklis
         checkboxesDiv.innerHTML = `
-          <label><input type="checkbox" id="check1"> Cek 1</label>
-          <label><input type="checkbox" id="check2"> Cek 2</label>
+          <label><input type="checkbox" ${barcode.checked.c1 ? "checked" : ""} onchange="saveCheck(${index}, 'c1', this.checked)"> Cek 1</label>
+          <label><input type="checkbox" ${barcode.checked.c2 ? "checked" : ""} onchange="saveCheck(${index}, 'c2', this.checked)"> Cek 2</label>
         `;
-      } else if (currentMode === "pertalite") {
+      } else {
+        // Pertalite hanya 1 ceklis
         checkboxesDiv.innerHTML = `
-          <label><input type="checkbox" id="check1"> Cek 1</label>
+          <label><input type="checkbox" ${barcode.checked.c1 ? "checked" : ""} onchange="saveCheck(${index}, 'c1', this.checked)"> Cek</label>
         `;
       }
     }
 
-    function startBarcode(filename, mode) {
+    function saveCheck(index, key, value) {
+      if (!barcodes[index].checked) barcodes[index].checked = {};
+      barcodes[index].checked[key] = value;
+    }
+
+    // Navigasi
+    document.getElementById("btnPrev").addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showBarcode(currentIndex);
+      }
+    });
+
+    document.getElementById("btnNext").addEventListener("click", () => {
+      if (currentIndex < barcodes.length - 1) {
+        currentIndex++;
+        showBarcode(currentIndex);
+      }
+    });
+
+    // Start Barcode
+    function startBarcode(filename, type) {
+      datasetType = type;
+      openFullscreen(); // masuk fullscreen
       loadCSV(filename).then(() => {
         if (barcodes.length > 0) {
           startSection.style.display = "none";
           barcodeSection.style.display = "flex";
           currentIndex = 0;
-          currentMode = mode;
           showBarcode(currentIndex);
         } else {
           alert("Data kosong atau gagal dimuat.");
@@ -204,33 +215,17 @@
       });
     }
 
+    // Tombol Awal
     document.getElementById("pertaliteBtn").addEventListener("click", () => {
       startBarcode("datapertalite.csv", "pertalite");
     });
 
     document.getElementById("biosolarBtn").addEventListener("click", () => {
-      startBarcode("datasolar.csv", "solar");
+      startBarcode("datasolar.csv", "biosolar");
     });
 
-    nextBtn.addEventListener("click", () => {
-      if (currentIndex < barcodes.length - 1) {
-        currentIndex++;
-        showBarcode(currentIndex);
-      } else {
-        alert("Ini barcode terakhir.");
-      }
-    });
-
-    prevBtn.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        showBarcode(currentIndex);
-      } else {
-        alert("Ini barcode pertama.");
-      }
-    });
-
-    backBtn.addEventListener("click", () => {
+    // Tombol Kembali
+    document.getElementById("backBtn").addEventListener("click", () => {
       barcodeSection.style.display = "none";
       startSection.style.display = "flex";
     });
