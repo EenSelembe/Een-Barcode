@@ -74,13 +74,13 @@ html, body {
 /* Tombol navigasi */
 .navBtn {
   position:absolute;
-  top:75%; /* sebelumnya 50%, diturunkan */
+  top:60%;
   transform:translateY(-50%);
   background: rgba(255,255,255,0.7);
   border:none;
-  padding:20px; /* lebih besar */
+  padding:20px;
   border-radius:50%;
-  font-size:36px; /* panah lebih besar */
+  font-size:36px;
   cursor:pointer;
   box-shadow:0 4px 10px rgba(0,0,0,0.4);
 }
@@ -132,7 +132,12 @@ html, body {
 <!-- QR Code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-let barcodes=[], currentIndex=0, checks={};
+let barcodes=[], currentIndex=0;
+
+// 🔑 Ambil data simpanan cekbox dari localStorage
+const type=getParam("type");
+let checks = JSON.parse(localStorage.getItem("checks_"+type)) || {};
+
 const qrcodeDiv=document.getElementById('qrcode');
 const barcodeNumberDiv=document.getElementById('barcodeNumber');
 const prevBtn=document.getElementById('prevBtn');
@@ -142,7 +147,6 @@ const checkboxContainer=document.getElementById('checkboxContainer');
 function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
 function goBack(){ window.location.href="menu.html"; }
 
-const type=getParam("type");
 const file=(type==="pertalite")?"datapertalite.csv":"datasolar.csv";
 
 fetch(file)
@@ -182,6 +186,9 @@ function saveCheck(index){
     currentChecks.check1=document.getElementById("check1").checked;
   }
   checks[index]=currentChecks;
+
+  // 🔑 Simpan ke localStorage
+  localStorage.setItem("checks_"+type, JSON.stringify(checks));
 }
 
 nextBtn.addEventListener("click",()=>{
