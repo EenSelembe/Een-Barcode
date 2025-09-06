@@ -2,106 +2,212 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<!-- Kunci layar agar tidak bisa di-zoom -->
+<!-- Kunci layar HP agar tidak bisa di-zoom -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Menu - EEN BARCODE WEBSITE</title>
+<title>Menu - Een Barcode Website</title>
 <style>
-/* Atur dasar halaman */
-html, body {
-  margin:0; padding:0; height:100%; width:100%;
-  font-family:Arial,sans-serif;
-  overflow:hidden; /* kunci supaya layar tidak bisa digeser */
-}
+  /* Dasar halaman */
+  html, body {
+    margin:0; padding:0; height:100%; width:100%;
+    font-family:Arial, sans-serif;
+    overflow:hidden; /* kunci supaya layar tidak bisa digeser */
+  }
 
-/* Background & layout */
-body {
-  margin:0;
-  height:100vh;
-  background: url('anime3.jpg') no-repeat center center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
+  /* Background & layout tengah */
+  body {
+    background: url('anime3.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color:#fff;
+    text-align:center;
+    padding: 20px;
+    position: relative;
+  }
 
-/* Tombol umum */
-button {
-  width:200px; padding:15px; margin:15px;
-  border:none; border-radius:8px;
-  font-size:18px; font-weight:bold; color:white;
-  background:linear-gradient(135deg,#ff512f,#dd2476);
-  cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
+  /* Sambutan: Hallo RENDI (gradien + glow, geser sedikit ke atas) */
+  #welcomeText {
+    font-size: 40px;
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    margin-top: -40px; /* geser ke atas */
+    background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2s infinite alternate, fadeIn 1.6s ease;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    letter-spacing: 2px;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #ff0080, 0 0 10px #ff8c00; }
+    to   { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff0080; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-/* Tombol logout (pojok kanan atas) */
-#logoutBtn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: auto;
-  padding: 10px 15px;
-  background: linear-gradient(135deg,#36d1dc,#5b86e5);
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#logoutBtn span {
-  font-size: 18px;
-}
+  /* Teks instruksi besar, tebal, jelas */
+  .instruction {
+    font-size: 28px;           /* lebih besar */
+    font-weight: 900;          /* sangat tebal */
+    text-align: center;        /* rata tengah */
+    margin: 20px 0 30px;       /* jarak atas-bawah */
+    line-height: 1.4;          /* jarak antar baris */
+    color: #fff;               /* putih agar kontras */
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+    letter-spacing: 2px;
+  }
 
-/* Teks instruksi */
-.instruction {
-  font-size: 28px;           /* lebih besar */
-  font-weight: 900;          /* sangat tebal */
-  text-align: center;        /* rata tengah */
-  margin: 20px 0;            /* jarak atas-bawah */
-  line-height: 1.4;          /* jarak antar baris */
-  color: #fff;               /* putih agar kontras */
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.8); /* bayangan agar jelas */
-  letter-spacing: 2px;       /* jarak antar huruf */
-}
+  /* Tombol umum */
+  button {
+    width:220px; padding:15px; margin:10px;
+    border:none; border-radius:8px;
+    font-size:18px; font-weight:bold; color:white;
+    background:linear-gradient(135deg,#ff512f,#dd2476);
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
+
+  /* Tampilan tombol nonaktif (Biosolar sementara dimatikan) */
+  button:disabled {
+    background: gray !important;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Tombol logout (pojok kanan atas) */
+  #logoutBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: auto;
+    padding: 10px 15px;
+    background: linear-gradient(135deg,#36d1dc,#5b86e5);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #logoutBtn span { font-size: 18px; }
+
+  /* Peringatan berjalan TANPA PUTUS + glow merah */
+  #warning {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    overflow: hidden;
+    background: transparent;
+  }
+  #warning .marquee {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 6s linear infinite; /* atur kecepatan di sini (lebih kecil = lebih cepat) */
+  }
+  #warning span {
+    display: inline-block;
+    margin-right: 80px; /* jarak antar teks */
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff0000;
+    text-transform: uppercase;
+    animation: glowRed 1s infinite alternate;
+  }
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* tanpa jeda jika konten digandakan */
+  }
+  @keyframes glowRed {
+    from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff3333; }
+    to   { text-shadow: 0 0 20px #ff3333, 0 0 40px #ff0000; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Tombol Logout -->
-<button id="logoutBtn" onclick="logout()">
-  <span>🚪</span> Logout
-</button>
+  <!-- Tombol Logout -->
+  <button id="logoutBtn" onclick="logout()">
+    <span>🚪</span> Logout
+  </button>
 
-<!-- Teks instruksi -->
-<div class="instruction">
-  Barcode apa yang ingin kamu cari<br>
-  Silahkan pilih dibawah ini
-</div>
+  <!-- Sambutan: diisi via JS sesuai username -->
+  <div id="welcomeText"></div>
 
-<!-- Menu utama -->
-<!-- Tombol Biosolar sementara dinonaktifkan -->
-<button disabled onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
-<button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
+  <!-- Teks instruksi besar, tebal, jelas -->
+  <div class="instruction">
+    Barcode apa yang ingin kamu cari<br>
+    Silahkan pilih dibawah ini
+  </div>
+
+  <!-- Menu utama -->
+  <!-- NOTE: Hapus 'disabled' untuk mengaktifkan kembali Biosolar -->
+  <button disabled onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
+  <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
+
+  <!-- Peringatan berjalan tanpa putus -->
+  <div id="warning">
+    <div class="marquee">
+      <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+      <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+      <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+      <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    </div>
+  </div>
 
 <script>
-/* === SCRIPT BAGIAN LOGIN/LOGOUT === */
+  /* =========================
+     CEK LOGIN (KOMPATIBEL DUA VERSI)
+     - Versi lama: localStorage.loggedIn === "true" & localStorage.username
+     - Versi lain: localStorage.loggedInUser (isi username)
+     ========================= */
+  const isLoggedIn = (localStorage.getItem("loggedIn") === "true") || !!localStorage.getItem("loggedInUser");
+  if (!isLoggedIn) {
+    window.location.href = "index.html";
+  }
 
-/* Logout dan arahkan ke index.html */
-function logout(){
-  localStorage.removeItem("loggedInUser"); // hapus sesi login
-  window.location.href = "index.html";     // balik ke login
-}
+  /* =========================
+     MAPPING USERNAME → NAMA TAMPILAN
+     (contoh: sokjago46 => Rendi)
+     ========================= */
+  const displayNames = {
+    "sokjago46": "Rendi",
+    "admin": "Administrator",
+    "user1": "Dewi",
+    "user2": "Andi",
+    "user3": "Sinta"
+  };
 
-/* === SCRIPT CEGAH TOMBOL BACK HP === */
+  /* Ambil username dari storage (mendukung dua cara penyimpanan) */
+  const storedUsername = localStorage.getItem("username") || localStorage.getItem("loggedInUser") || "User";
+  const displayName = displayNames[storedUsername] || storedUsername;
 
-/* Trik pushState supaya tombol back tidak bisa kembali */
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-  history.go(1); // paksa maju lagi kalau user tekan tombol back
-};
+  /* Tampilkan sambutan */
+  document.getElementById("welcomeText").innerHTML = "Hallo<br>" + displayName;
+
+  /* =========================
+     LOGOUT: bersihkan semua kemungkinan kunci sesi
+     ========================= */
+  function logout(){
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("username");
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+  }
+
+  /* =========================
+     CEGAH TOMBOL BACK HP (blok kembali ke halaman sebelumnya)
+     ========================= */
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
 </script>
 
 </body>
