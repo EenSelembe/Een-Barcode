@@ -1,86 +1,129 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Menu - Een Barcode</title>
-<style>
-html, body {
-  margin:0;
-  padding:0;
-  height:100%;
-  width:100%;
-  overflow:hidden;       /* kunci agar tidak bisa scroll */
-  touch-action:none;     /* cegah geser di layar sentuh */
-  font-family:Arial,sans-serif;
-}
-body {
-  background: url('anime3.jpg') no-repeat center center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Menu - EEN BARCODE WEBSITE</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: url('anime3.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-/* Tombol umum */
-button {
-  width:200px; padding:15px; margin:15px;
-  border:none; border-radius:8px;
-  font-size:18px; font-weight:bold; color:white;
-  background:linear-gradient(135deg,#ff512f,#dd2476);
-  cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
+    /* Tombol logout */
+    #logoutBtn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg,#36d1dc,#5b86e5);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
 
-/* Tombol logout */
-#logoutBtn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: auto;
-  padding: 10px 15px;
-  background: linear-gradient(135deg,#36d1dc,#5b86e5);
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#logoutBtn span {
-  font-size: 18px;
-}
-</style>
+    #logoutBtn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    }
+
+    /* Sambutan */
+    .welcome {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      margin-bottom: 30px;
+    }
+
+    /* Container tombol */
+    .menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    /* Tombol menu */
+    .menu-btn {
+      width: 220px;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+    }
+
+    .solar {
+      background: linear-gradient(135deg,#ff512f,#dd2476);
+    }
+    .pertalite {
+      background: linear-gradient(135deg,#36d1dc,#5b86e5);
+    }
+  </style>
 </head>
 <body>
 
-<!-- Tombol Logout -->
-<button id="logoutBtn" onclick="logout()">
-  <span>🚪</span> Logout
-</button>
+  <!-- Tombol Logout -->
+  <button id="logoutBtn" onclick="logout()">🚪 Logout</button>
 
-<!-- Menu utama -->
-<button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
-<button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+  <!-- Sambutan -->
+  <div class="welcome" id="welcomeText">Halo, User</div>
 
-<script>
-// Cek login
-if(localStorage.getItem("loggedIn") !== "true"){
-  window.location.replace("index.html");
-}
+  <!-- Menu -->
+  <div class="menu-container">
+    <button class="menu-btn solar" onclick="location.href='barcode.html?type=solar'">Biosolar</button>
+    <button class="menu-btn pertalite" onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+  </div>
 
-// Logout aman
-function logout(){
-  localStorage.removeItem("loggedIn");
-  window.location.replace("index.html");
-  window.history.pushState(null, "", "index.html");
-  window.onpopstate = function () {
-    window.location.replace("index.html");
-  };
-}
-</script>
+  <script>
+    // Cek login
+    if(localStorage.getItem("loggedIn") !== "true"){
+      window.location.href = "index.html";
+    }
+
+    // Ambil username dari localStorage
+    const username = localStorage.getItem("username") || "User";
+    document.getElementById("welcomeText").innerText = "Halo, " + username;
+
+    // Fungsi logout
+    function logout(){
+      localStorage.removeItem("loggedIn");
+      localStorage.removeItem("username");
+      window.location.href = "index.html";
+    }
+
+    // Cegah tombol back
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      history.go(1);
+    };
+  </script>
 
 </body>
 </html>
