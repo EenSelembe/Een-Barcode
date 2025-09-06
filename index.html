@@ -14,13 +14,13 @@
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
-      overflow: hidden; /* kunci supaya layar tidak bisa digeser */
+      overflow: hidden; /* cegah layar bergeser */
     }
 
     /* Teks SELAMAT DATANG */
     .welcome {
       position: absolute;
-      top: 20px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
@@ -48,7 +48,7 @@
       position: relative;
     }
 
-    /* Teks berjalan di dalam kotak */
+    /* Teks berjalan */
     .marquee {
       background: rgba(255,255,255,0.1);
       padding: 8px;
@@ -62,16 +62,18 @@
     .marquee span {
       display: inline-block;
       padding-left: 100%;
-      animation: marquee 10s linear infinite;
+      animation: marquee 12s linear infinite;
       font-size: 18px;
       font-weight: bold;
-      color: #00e5ff;
+      background: linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       letter-spacing: 2px;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
     }
 
     @keyframes marquee {
-      0% { transform: translateX(0); }
+      0%   { transform: translateX(0); }
       100% { transform: translateX(-100%); }
     }
 
@@ -107,11 +109,11 @@
     /* Animasi teks welcome */
     @keyframes glow {
       from { text-shadow: 2px 2px 8px rgba(0,0,0,0.6); }
-      to { text-shadow: 4px 4px 16px rgba(255,255,255,0.9); }
+      to   { text-shadow: 4px 4px 16px rgba(255,255,255,0.9); }
     }
     @keyframes fadeIn {
       from { opacity: 0; }
-      to { opacity: 1; }
+      to   { opacity: 1; }
     }
   </style>
 </head>
@@ -129,12 +131,13 @@
   </div>
 
   <script>
-    // Cegah tombol back setelah logout
+    // Cegah tombol back
     history.pushState(null, null, location.href);
     window.onpopstate = function () {
       history.go(1);
     };
 
+    // Fungsi login
     function login() {
       const user = document.getElementById("username").value;
       const pass = document.getElementById("password").value;
