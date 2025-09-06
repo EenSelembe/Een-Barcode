@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Halaman Utama</title>
+</head>
+<body>
+  <h1>Selamat Datang 🎉</h1>
+  <p>Ini adalah halaman setelah login.</p>
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    // Cek apakah sudah login
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+
+    // Fungsi logout
+    function logout() {
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
