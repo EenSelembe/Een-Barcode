@@ -47,9 +47,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover {
-      background: #009973;
-    }
+    button:hover { background: #009973; }
     .footer {
       position: absolute;
       bottom: 20px;
@@ -80,17 +78,21 @@
       const u = document.getElementById("username").value;
       const p = document.getElementById("password").value;
       const ok = users.find(x => x.u === u && x.p === p);
-      if(ok){
-        window.location.href="menu.html";
-      } else {
-        alert("Username atau password salah!");
-      }
+      if(ok){ window.location.href="menu.html"; } 
+      else { alert("Username atau password salah!"); }
       return false;
     }
 
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
     }
+
+    // Fullscreen di HP
+    document.body.addEventListener('click', ()=>{
+      if(document.documentElement.requestFullscreen){
+        document.documentElement.requestFullscreen();
+      }
+    }, {once:true});
   </script>
 </body>
 </html>
