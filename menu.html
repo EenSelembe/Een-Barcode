@@ -7,16 +7,23 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#000000">
   <style>
-    body {
+    html, body {
       margin: 0;
-      height: 100vh;
-      background: url('anime2.jpg') no-repeat center center fixed;
-      background-size: cover;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+    }
+    body {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      background: #000; /* fallback warna hitam */
+      background-image: url('anime.jpg'); /* pastikan file ada di folder sama */
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
     }
     button {
       width: 200px;
@@ -43,7 +50,7 @@
   <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
 
   <script>
-    // Fullscreen otomatis
+    // Fullscreen otomatis saat disentuh HP
     document.body.addEventListener('click', ()=>{
       if(document.documentElement.requestFullscreen){
         document.documentElement.requestFullscreen();
