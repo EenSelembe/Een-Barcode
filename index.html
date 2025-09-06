@@ -4,26 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login - Een Barcode</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
 <style>
-html, body {
-  margin:0; padding:0; height:100%; width:100%;
-  font-family: Arial, sans-serif;
-}
-body {
-  display:flex; flex-direction:column;
-  justify-content:center; align-items:center;
-  background:url('anime.jpg') no-repeat center center fixed;
-  background-size:cover;
-  color:white; text-align:center;
-}
-h1 { font-size:8vw; margin-bottom:40px; text-shadow:2px 2px 5px #00ffcc; }
-form { display:flex; flex-direction:column; width:80%; max-width:300px; }
-input { padding:10px; margin:8px 0; border:none; border-radius:5px; }
-button { padding:10px; margin-top:10px; border:none; border-radius:5px; background:#00cc99; color:white; font-weight:bold; cursor:pointer; }
-button:hover { background:#009973; }
-.footer { position:absolute; bottom:10%; font-size:6vw; font-weight:bold; text-shadow:2px 2px 6px #00ffff; }
+html, body {margin:0; padding:0; height:100%; width:100%; font-family:Arial,sans-serif;}
+body {display:flex; flex-direction:column; justify-content:center; align-items:center;
+      background:url('anime.jpg') no-repeat center center fixed; background-size:cover;
+      color:white; text-align:center;}
+h1 {font-size:8vw; margin-bottom:40px; text-shadow:2px 2px 5px #00ffcc;}
+form {display:flex; flex-direction:column; width:80%; max-width:300px;}
+input {padding:10px; margin:8px 0; border:none; border-radius:5px;}
+button {padding:10px; margin-top:10px; border:none; border-radius:5px; background:#00cc99; color:white; font-weight:bold; cursor:pointer;}
+button:hover {background:#009973;}
+.footer {position:absolute; bottom:10%; font-size:6vw; font-weight:bold; text-shadow:2px 2px 6px #00ffff;}
 </style>
 </head>
 <body>
@@ -51,14 +42,10 @@ function login(){
   else { alert("Username atau password salah!"); }
   return false;
 }
-
-// Fullscreen di HP
+// Fullscreen HP
 document.body.addEventListener('click', ()=>{
   if(document.documentElement.requestFullscreen){ document.documentElement.requestFullscreen(); }
 }, {once:true});
-
-// PWA service worker
-if("serviceWorker" in navigator){ navigator.serviceWorker.register("service-worker.js"); }
 </script>
 </body>
 </html>
