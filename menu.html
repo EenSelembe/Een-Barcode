@@ -14,18 +14,27 @@ html, body {
 }
 
 body {
-  margin: 0;
   height: 100vh;
   background: url('anime3.jpg') no-repeat center center;
   background-size: cover;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
 button {
-  width: 200px;
+  width: 80%;
+  max-width: 250px;
   padding: 15px;
-  margin: 15px;
+  margin: 10px;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 18px;
   font-weight: bold;
   color: white;
@@ -42,7 +51,9 @@ button:hover {
 </style>
 </head>
 <body>
-  <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
-  <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+  <div class="container">
+    <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
+    <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+  </div>
 </body>
 </html>
