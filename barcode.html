@@ -1,6 +1,60 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Barcode</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    #backBtn {
+      position: absolute;
+      top: 10px;
+      font-size: 18px;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 5px;
+      background: #00cc99;
+      color: white;
+      cursor: pointer;
+    }
+    img {
+      max-width: 80%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <button id="backBtn" onclick="history.back()">Kembali</button>
+  <h2 style="color:white" id="title"></h2>
+  <img id="barcode" src="" alt="Barcode">
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    const title = document.getElementById("title");
+    const img = document.getElementById("barcode");
+    if(type === "solar"){
+      title.innerText = "Barcode Biosolar";
+      img.src = "datasolar.png"; 
+    } else {
+      title.innerText = "Barcode Pertalite";
+      img.src = "datapertalite.png"; 
+    }
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
 <meta charset="UTF-8">
 <title>Een Barcode QR</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
