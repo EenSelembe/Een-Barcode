@@ -2,60 +2,68 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" 
+<meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Barcode - Een Barcode</title>
 <style>
 html, body {
-  margin:0; padding:20px; height:100%; width:100%;
-  font-family:Arial,sans-serif; color:white; text-align:center;
-  background: url('anime2.jpg') no-repeat center center fixed;
+  margin:0;
+  padding:0;
+  height:100%;
+  width:100%;
+  overflow:hidden;    /* kunci layar */
+  touch-action:none;  /* cegah geser */
+  font-family:Arial,sans-serif;
+  color:white;
+  text-align:center;
+  background: url('anime2.jpg') no-repeat center center;
   background-size: cover;
 }
-
-/* Tombol kembali di atas */
 #topButton {
-  position:absolute; top:20px; left:50%; transform:translateX(-50%);
-  padding:12px 25px; font-weight:bold; font-size:18px; border:none;
-  border-radius:8px; background:linear-gradient(135deg,#36d1dc,#5b86e5);
-  color:white; cursor:pointer;
+  position:absolute;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:12px 25px;
+  font-weight:bold;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white;
+  cursor:pointer;
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
-
-/* Barcode */
 #qrcode { margin-top:80px; }
 #qrcode canvas { width:80vw !important; height:80vw !important; }
-
-/* Nomor barcode */
 .barcode-number {
-  font-size:22px; font-weight:bold; 
-  text-shadow:1px 1px 3px black; 
+  font-size:22px;
+  font-weight:bold;
+  text-shadow:1px 1px 3px black;
   margin:12px;
 }
-
-/* Checkbox */
-.checkboxes { 
-  display:flex; gap:20px; 
-  justify-content:center; 
-  margin-bottom:20px; 
+.checkboxes {
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  margin-bottom:20px;
 }
-.checkboxes label { 
-  font-size:18px; color:white; 
-  background: rgba(0,0,0,0.5); 
-  padding:5px 10px; 
-  border-radius:8px; 
+.checkboxes label {
+  font-size:18px;
+  color:white;
+  background: rgba(0,0,0,0.5);
+  padding:5px 10px;
+  border-radius:8px;
 }
-
-/* Tombol navigasi */
-.navBtn { 
-  position:absolute; 
-  bottom:120px; 
-  background: rgba(255,255,255,0.7); 
-  border:none; 
-  padding:15px; 
-  border-radius:50%; 
-  font-size:28px; 
-  cursor:pointer; 
+.navBtn {
+  position:absolute;
+  bottom:120px;  /* dekat dengan barcode */
+  background: rgba(255,255,255,0.7);
+  border:none;
+  padding:15px;
+  border-radius:50%;
+  font-size:28px;
+  cursor:pointer;
 }
 #prevBtn { left:30px; }
 #nextBtn { right:30px; }
@@ -64,17 +72,15 @@ html, body {
 <body>
 
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
-
 <div id="qrcode"></div>
 <div class="barcode-number" id="barcodeNumber"></div>
 <div class="checkboxes" id="checkboxContainer"></div>
-
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// 🔒 Cek login
+// Cek login
 if(localStorage.getItem("loggedIn") !== "true"){
   window.location.href = "index.html";
 }
@@ -86,12 +92,8 @@ const prevBtn=document.getElementById('prevBtn');
 const nextBtn=document.getElementById('nextBtn');
 const checkboxContainer=document.getElementById('checkboxContainer');
 
-function getParam(name){ 
-  return new URLSearchParams(window.location.search).get(name); 
-}
-function goBack(){ 
-  window.location.href="menu.html"; 
-}
+function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
+function goBack(){ window.location.href="menu.html"; }
 
 const type=getParam("type");
 const file=(type==="pertalite")?"datapertalite.csv":"datasolar.csv";
@@ -126,36 +128,25 @@ function showBarcode(index){
 
 function saveCheck(index){
   const currentChecks={};
-  if(type==="solar"){ 
-    currentChecks.check1=document.getElementById("check1").checked; 
-    currentChecks.check2=document.getElementById("check2").checked; 
-  }
-  else{ 
-    currentChecks.check1=document.getElementById("check1").checked; 
+  if(type==="solar"){
+    currentChecks.check1=document.getElementById("check1").checked;
+    currentChecks.check2=document.getElementById("check2").checked;
+  } else {
+    currentChecks.check1=document.getElementById("check1").checked;
   }
   checks[index]=currentChecks;
 }
 
 nextBtn.addEventListener("click",()=>{
   saveCheck(currentIndex);
-  if(currentIndex<barcodes.length-1){ 
-    currentIndex++; 
-    showBarcode(currentIndex); 
-  }
-  else{ 
-    alert("Ini barcode terakhir."); 
-  }
+  if(currentIndex<barcodes.length-1){ currentIndex++; showBarcode(currentIndex); }
+  else{ alert("Ini barcode terakhir."); }
 });
 
 prevBtn.addEventListener("click",()=>{
   saveCheck(currentIndex);
-  if(currentIndex>0){ 
-    currentIndex--; 
-    showBarcode(currentIndex); 
-  }
-  else{ 
-    alert("Ini barcode pertama."); 
-  }
+  if(currentIndex>0){ currentIndex--; showBarcode(currentIndex); }
+  else{ alert("Ini barcode pertama."); }
 });
 </script>
 </body>
