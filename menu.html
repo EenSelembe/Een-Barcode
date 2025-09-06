@@ -49,7 +49,7 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* Teks instruksi diperbaiki */
+  /* Teks instruksi */
   .instruction {
     font-size: 20px;        
     font-weight: 700;       
@@ -78,23 +78,26 @@
     transform: none;
   }
 
+  /* Tombol logout di bawah tengah */
   #logoutBtn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
+    position: fixed;
+    bottom: 40px; /* jarak dari bawah, di atas warning */
+    left: 50%;
+    transform: translateX(-50%);
     width: auto;
-    padding: 10px 15px;
+    padding: 10px 20px;
     background: linear-gradient(135deg,#36d1dc,#5b86e5);
     font-size: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   }
   #logoutBtn span { font-size: 18px; }
 
   /* Peringatan berjalan TANPA PUTUS */
   #warning {
-    position: fixed;   /* selalu tempel di bawah layar */
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -129,10 +132,6 @@
 </head>
 <body>
 
-  <button id="logoutBtn" onclick="logout()">
-    <span>🚪</span> Logout
-  </button>
-
   <div id="welcomeText"></div>
 
   <div class="instruction">
@@ -142,6 +141,11 @@
 
   <button disabled onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
   <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
+
+  <!-- Tombol logout pindah ke bawah tengah -->
+  <button id="logoutBtn" onclick="logout()">
+    <span>🚪</span> Logout
+  </button>
 
   <div id="warning">
     <div class="marquee">
