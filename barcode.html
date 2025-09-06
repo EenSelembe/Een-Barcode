@@ -2,12 +2,16 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Barcode - Een Barcode</title>
 <style>
 html, body {
   margin: 0;
-  padding: 20px;
+  padding: 0;
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
@@ -15,14 +19,13 @@ html, body {
   text-align: center;
   background: url('anime2.jpg') no-repeat center center;
   background-size: cover;
-  overflow-x: hidden; /* cegah geser horizontal */
+  overflow: hidden; /* cegah scroll */
 }
 
 #topButton {
   position: fixed;
   top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 15px;
   padding: 10px 20px;
   font-weight: bold;
   font-size: 16px;
@@ -36,31 +39,36 @@ html, body {
 }
 
 #qrcode {
-  margin-top: 80px;
-  display: flex;
-  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #qrcode canvas {
-  width: 80vw !important;  /* responsif */
+  width: 80vw !important;
   height: 80vw !important;
-  max-width: 400px;        /* biar ga kebesaran di tablet */
+  max-width: 400px;
   max-height: 400px;
 }
 
 .barcode-number {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 20px;
   font-weight: bold;
   text-shadow: 1px 1px 3px black;
-  margin: 12px;
 }
 
 .checkboxes {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  flex-wrap: wrap;
   gap: 15px;
-  justify-content: center;
-  margin-bottom: 20px;
 }
 
 .checkboxes label {
@@ -73,7 +81,7 @@ html, body {
 
 .navBtn {
   position: fixed;
-  bottom: 25px;
+  bottom: 20px;
   background: rgba(255,255,255,0.8);
   border: none;
   padding: 12px;
@@ -89,7 +97,7 @@ html, body {
 </head>
 <body>
 
-<button id="topButton" onclick="goBack()">⬅️ Kembali</button>
+<button id="topButton" onclick="goBack()">⬅️</button>
 <div id="qrcode"></div>
 <div class="barcode-number" id="barcodeNumber"></div>
 <div class="checkboxes" id="checkboxContainer"></div>
