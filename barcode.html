@@ -13,7 +13,6 @@ html, body {
   overflow:hidden;
 }
 
-/* Tombol kembali */
 #topButton {
   position:absolute; 
   top:20px; 
@@ -31,7 +30,6 @@ html, body {
   z-index:9999;
 }
 
-/* Kontainer barcode */
 .barcode-container {
   position: relative;
   display:flex;
@@ -48,9 +46,9 @@ html, body {
   height:80vw !important;
   max-width:400px;
   max-height:400px;
-  border: 6px solid white;               /* ✅ border putih */
-  border-radius: 12px;                   /* sudut bulat */
-  box-shadow: 0 0 20px rgba(255,255,255,0.7); /* efek glow putih */
+  border: 6px solid white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.7);
 }
 
 .barcode-number {
@@ -74,10 +72,26 @@ html, body {
   border-radius:8px;
 }
 
-/* Tombol navigasi */
+/* ✅ Nama pengguna dengan gradient + glow */
+#usernameDisplay {
+  margin-top:20px;
+  font-size:28px;
+  font-weight:700;
+  text-transform:uppercase;
+  background:linear-gradient(90deg,#ff0080,#ff8c00,#40e0d0);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glow 2s infinite alternate;
+  text-shadow:2px 2px 10px rgba(0,0,0,0.7);
+}
+@keyframes glow {
+  from { text-shadow:2px 2px 8px rgba(0,0,0,0.6); }
+  to   { text-shadow:2px 2px 20px rgba(255,255,255,0.9); }
+}
+
 .navBtn {
   position:absolute;
-  top:80%;
+  top:60%;
   transform:translateY(-50%);
   background: rgba(255,255,255,0.7);
   border:none;
@@ -90,7 +104,6 @@ html, body {
 #prevBtn { left:20px; }
 #nextBtn { right:20px; }
 
-/* Warning berjalan */
 .warning {
   position:absolute;
   bottom:10px;
@@ -115,29 +128,24 @@ html, body {
 </head>
 <body>
 
-<!-- Tombol kembali -->
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
 
-<!-- Kontainer utama barcode -->
 <div class="barcode-container">
   <div id="qrcode"></div>
   <div class="barcode-number" id="barcodeNumber"></div>
   <div class="checkboxes" id="checkboxContainer"></div>
+  <!-- ✅ Nama pengguna -->
+  <div id="usernameDisplay"></div>
 </div>
 
-<!-- Tombol navigasi -->
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
-<!-- Warning berjalan -->
 <div class="warning"><span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span></div>
 
-<!-- QR Code generator -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 let barcodes=[], currentIndex=0;
-
-// 🔑 Ambil data simpanan cekbox dari localStorage
 const type=getParam("type");
 let checks = JSON.parse(localStorage.getItem("checks_"+type)) || {};
 
@@ -146,9 +154,14 @@ const barcodeNumberDiv=document.getElementById('barcodeNumber');
 const prevBtn=document.getElementById('prevBtn');
 const nextBtn=document.getElementById('nextBtn');
 const checkboxContainer=document.getElementById('checkboxContainer');
+const usernameDisplay=document.getElementById("usernameDisplay");
 
 function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
 function goBack(){ window.location.href="menu.html"; }
+
+// ✅ Ambil username dari localStorage
+const user = localStorage.getItem("currentUser") || "Pengguna";
+usernameDisplay.textContent = "👤 " + user;
 
 const file=(type==="pertalite")?"datapertalite.csv":"datasolar.csv";
 
@@ -189,8 +202,6 @@ function saveCheck(index){
     currentChecks.check1=document.getElementById("check1").checked;
   }
   checks[index]=currentChecks;
-
-  // 🔑 Simpan ke localStorage
   localStorage.setItem("checks_"+type, JSON.stringify(checks));
 }
 
