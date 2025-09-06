@@ -2,123 +2,83 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#000000">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" 
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Barcode - Een Barcode</title>
 <style>
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  font-family: Arial, sans-serif;
-  color: white;
-  text-align: center;
-  background: url('anime2.jpg') no-repeat center center;
+  margin:0; padding:20px; height:100%; width:100%;
+  font-family:Arial,sans-serif; color:white; text-align:center;
+  background: url('anime2.jpg') no-repeat center center fixed;
   background-size: cover;
-  overflow: hidden; /* cegah scroll */
 }
 
+/* Tombol kembali di atas */
 #topButton {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  padding: 10px 20px;
-  font-weight: bold;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #36d1dc, #5b86e5);
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  z-index: 1000;
+  position:absolute; top:20px; left:50%; transform:translateX(-50%);
+  padding:12px 25px; font-weight:bold; font-size:18px; border:none;
+  border-radius:8px; background:linear-gradient(135deg,#36d1dc,#5b86e5);
+  color:white; cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
 
-#qrcode {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+/* Barcode */
+#qrcode { margin-top:80px; }
+#qrcode canvas { width:80vw !important; height:80vw !important; }
 
-#qrcode canvas {
-  width: 80vw !important;
-  height: 80vw !important;
-  max-width: 400px;
-  max-height: 400px;
-}
-
+/* Nomor barcode */
 .barcode-number {
-  position: absolute;
-  bottom: 200px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 40px;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px black;
+  font-size:22px; font-weight:bold; 
+  text-shadow:1px 1px 3px black; 
+  margin:12px;
 }
 
-.checkboxes {
-  position: absolute;
-  bottom: 150px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 15px;
+/* Checkbox */
+.checkboxes { 
+  display:flex; gap:20px; 
+  justify-content:center; 
+  margin-bottom:20px; 
+}
+.checkboxes label { 
+  font-size:18px; color:white; 
+  background: rgba(0,0,0,0.5); 
+  padding:5px 10px; 
+  border-radius:8px; 
 }
 
-.checkboxes label {
-  font-size: 16px;
-  color: white;
-  background: rgba(0,0,0,0.5);
-  padding: 5px 12px;
-  border-radius: 8px;
+/* Tombol navigasi */
+.navBtn { 
+  position:absolute; 
+  bottom:120px; 
+  background: rgba(255,255,255,0.7); 
+  border:none; 
+  padding:15px; 
+  border-radius:50%; 
+  font-size:28px; 
+  cursor:pointer; 
 }
-
-#prevBtn {
-  position: absolute;
-  top: calc(45% + 180px); /* sama dengan nextBtn */
-  left: 20px;             /* tepi kiri */
-}
-
-#nextBtn {
-  position: absolute;
-  top: calc(45% + 180px); /* sejajar */
-  right: 20px;            /* tepi kanan */
-}
-
-.navBtn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.8);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-}
-
-
+#prevBtn { left:30px; }
+#nextBtn { right:30px; }
 </style>
 </head>
 <body>
 
-<button id="topButton" onclick="goBack()">⬅️</button>
+<button id="topButton" onclick="goBack()">⬅️ Kembali</button>
+
 <div id="qrcode"></div>
 <div class="barcode-number" id="barcodeNumber"></div>
 <div class="checkboxes" id="checkboxContainer"></div>
+
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+// 🔒 Cek login
+if(localStorage.getItem("loggedIn") !== "true"){
+  window.location.href = "index.html";
+}
+
 let barcodes=[], currentIndex=0, checks={};
 const qrcodeDiv=document.getElementById('qrcode');
 const barcodeNumberDiv=document.getElementById('barcodeNumber');
@@ -126,8 +86,12 @@ const prevBtn=document.getElementById('prevBtn');
 const nextBtn=document.getElementById('nextBtn');
 const checkboxContainer=document.getElementById('checkboxContainer');
 
-function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
-function goBack(){ window.location.href="menu.html"; }
+function getParam(name){ 
+  return new URLSearchParams(window.location.search).get(name); 
+}
+function goBack(){ 
+  window.location.href="menu.html"; 
+}
 
 const type=getParam("type");
 const file=(type==="pertalite")?"datapertalite.csv":"datasolar.csv";
@@ -142,7 +106,7 @@ fetch(file)
 function showBarcode(index){
   qrcodeDiv.innerHTML="";
   barcodeNumberDiv.textContent=`#${index+1}`;
-  new QRCode(qrcodeDiv,{text:barcodes[index], width:400, height:400});
+  new QRCode(qrcodeDiv,{text:barcodes[index], width:600, height:600});
 
   checkboxContainer.innerHTML="";
   if(type==="solar"){
@@ -162,25 +126,36 @@ function showBarcode(index){
 
 function saveCheck(index){
   const currentChecks={};
-  if(type==="solar"){
-    currentChecks.check1=document.getElementById("check1").checked;
-    currentChecks.check2=document.getElementById("check2").checked;
-  } else {
-    currentChecks.check1=document.getElementById("check1").checked;
+  if(type==="solar"){ 
+    currentChecks.check1=document.getElementById("check1").checked; 
+    currentChecks.check2=document.getElementById("check2").checked; 
+  }
+  else{ 
+    currentChecks.check1=document.getElementById("check1").checked; 
   }
   checks[index]=currentChecks;
 }
 
 nextBtn.addEventListener("click",()=>{
   saveCheck(currentIndex);
-  if(currentIndex<barcodes.length-1){ currentIndex++; showBarcode(currentIndex); }
-  else{ alert("Ini barcode terakhir."); }
+  if(currentIndex<barcodes.length-1){ 
+    currentIndex++; 
+    showBarcode(currentIndex); 
+  }
+  else{ 
+    alert("Ini barcode terakhir."); 
+  }
 });
 
 prevBtn.addEventListener("click",()=>{
   saveCheck(currentIndex);
-  if(currentIndex>0){ currentIndex--; showBarcode(currentIndex); }
-  else{ alert("Ini barcode pertama."); }
+  if(currentIndex>0){ 
+    currentIndex--; 
+    showBarcode(currentIndex); 
+  }
+  else{ 
+    alert("Ini barcode pertama."); 
+  }
 });
 </script>
 </body>
