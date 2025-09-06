@@ -22,15 +22,16 @@ html, body {
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* Container barcode + nomor + checkbox */
+/* Kontainer barcode */
 .barcode-container {
+  position: relative;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;   /* barcode di tengah layar */
-  min-height:calc(100vh - 200px);
+  justify-content:flex-start;
+  height:100vh;
+  padding-top:180px;  /* Turunkan barcode */
   box-sizing:border-box;
-  padding:20px;
 }
 
 #qrcode canvas {
@@ -91,7 +92,7 @@ html, body {
 .warning span {
   display:inline-block;
   padding-left:100%;
-  animation:scrollText 8s linear infinite;
+  animation:scrollText 6s linear infinite;
 }
 @keyframes scrollText {
   from { transform:translateX(0); }
