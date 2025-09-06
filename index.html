@@ -3,277 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Barcode Login</title>
+  <title>Een Barcode</title>
   <style>
-    body {
+    body, html {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: Arial, sans-serif;
       background: url('anime.jpg') no-repeat center center fixed;
       background-size: cover;
-      height: 100vh;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    .container {
-      background: rgba(0,0,0,0.6);
-      padding: 30px;
-      border-radius: 12px;
+
+    .login-container {
+      width: 100%;
+      max-width: 320px;
       text-align: center;
-      color: white;
-      width: 300px;
-    }
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-    button {
-      padding: 10px 20px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #ff9800;
-      color: white;
-      font-weight: bold;
-    }
-    #startSection, #barcodeSection {
-      display: none;
-    }
-    .start-btn {
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: #ff9800;
-      color: white;
-      font-weight: bold;
-    }
-    .info-text {
-      margin-top: 20px;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    #barcodeSection {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: url('anime2.jpg') no-repeat center center fixed;
-      background-size: cover;
-      text-align: center;
-      color: white;
       position: relative;
+      padding: 20px;
     }
-    #backBtn {
+
+    .welcome {
       position: absolute;
-      top: 10px;
+      top: 30px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: red;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #qrImage {
-      margin: 20px auto;
-      display: block;
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    #nomorText {
       font-size: 24px;
-      margin: 10px 0;
-    }
-    #controls {
-      margin-top: 20px;
-    }
-    #controls button {
-      padding: 10px 20px;
-      margin: 5px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #2196f3;
-      color: white;
       font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 100px;
+    }
+
+    input {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      background: linear-gradient(135deg, #ff512f, #dd2476);
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .error {
+      color: yellow;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .footer-text {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 14px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* Menu setelah login */
+    .menu-container {
+      display: none;
+      text-align: center;
+    }
+
+    .menu-container h2 {
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .menu-container button {
+      display: block;
+      width: 200px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #36d1dc, #5b86e5);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    .menu-container button:hover {
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <!-- Halaman Login -->
-  <div id="loginSection" class="container">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username"><br>
-    <input type="password" id="password" placeholder="Password"><br>
-    <button id="loginBtn">Masuk</button>
-    <p id="loginError" style="color:red; display:none;">Username atau Password salah!</p>
+  <!-- Login Section -->
+  <div class="login-container" id="loginSection">
+    <h1 class="welcome">SELAMAT DATANG</h1>
+
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <p id="error" class="error"></p>
+    <footer class="footer-text">EEN BARCODE</footer>
   </div>
 
-  <!-- Menu Awal -->
-  <div id="startSection" class="container">
-    <button class="start-btn" id="pertaliteBtn">🚀 PERTALITE</button>
-    <button class="start-btn" id="biosolarBtn">🚀 BIOSOLAR</button>
-    <div class="info-text">Tolong Jangan Disebarkan Barcode Ini</div>
+  <!-- Menu Section -->
+  <div class="menu-container" id="menuSection">
+    <h2>Pilih Jenis BBM</h2>
+    <button onclick="window.location.href='solar.html'">🚀 Biosolar</button>
+    <button onclick="window.location.href='pertalite.html'">⛽ Pertalite</button>
+    <button onclick="logout()">Logout</button>
   </div>
-
-  <!-- Halaman Barcode -->
-  <div id="barcodeSection">
-    <button id="backBtn">⬅ Kembali</button>
-    <canvas id="qrImage"></canvas>
-    <div id="nomorText"></div>
-    <div id="checkboxes"></div>
-    <div id="controls">
-      <button id="btnPrev">⬅ Sebelumnya</button>
-      <button id="btnNext">➡ Selanjutnya</button>
-    </div>
-  </div>
-
-  <!-- QRCode Library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
   <script>
-    // Daftar user
     const users = [
-      {username: "user1", password: "pass1"},
-      {username: "user2", password: "pass2"},
-      {username: "user3", password: "pass3"},
-      {username: "user4", password: "pass4"},
-      {username: "user5", password: "pass5"},
+      { username: "user1", password: "pass1" },
+      { username: "user2", password: "pass2" },
+      { username: "user3", password: "pass3" },
+      { username: "user4", password: "pass4" },
+      { username: "user5", password: "pass5" }
     ];
 
-    let barcodes = [];
-    let currentIndex = 0;
-    let barcodeSection = document.getElementById("barcodeSection");
-    let startSection = document.getElementById("startSection");
-    let loginSection = document.getElementById("loginSection");
-    let qrImage = document.getElementById("qrImage");
-    let nomorText = document.getElementById("nomorText");
-    let checkboxesDiv = document.getElementById("checkboxes");
-    let datasetType = "";
+    const loginSection = document.getElementById("loginSection");
+    const menuSection = document.getElementById("menuSection");
+    const form = document.getElementById("loginForm");
 
-    // Login
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      let uname = document.getElementById("username").value.trim();
-      let pass = document.getElementById("password").value.trim();
+    // Cek session login
+    if (localStorage.getItem("loggedIn") === "true") {
+      loginSection.style.display = "none";
+      menuSection.style.display = "block";
+    }
 
-      let valid = users.some(user => user.username === uname && user.password === pass);
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      if (valid) {
+      const validUser = users.find(
+        (u) => u.username === username && u.password === password
+      );
+
+      if (validUser) {
+        localStorage.setItem("loggedIn", "true");
         loginSection.style.display = "none";
-        startSection.style.display = "flex";
+        menuSection.style.display = "block";
       } else {
-        document.getElementById("loginError").style.display = "block";
+        document.getElementById("error").innerText = "Username atau password salah!";
       }
     });
 
-    // Fullscreen
-    function openFullscreen() {
-      let elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
-      }
+    function logout() {
+      localStorage.removeItem("loggedIn");
+      window.location.reload();
     }
-
-    // Load CSV
-    async function loadCSV(file) {
-      const response = await fetch(file);
-      const text = await response.text();
-      const rows = text.trim().split("\n");
-      barcodes = rows.map((row, index) => {
-        return { kode: row.trim(), nomor: index + 1, checked: {} };
-      });
-    }
-
-    // Tampilkan Barcode
-    function showBarcode(index) {
-      let barcode = barcodes[index];
-      if (!barcode) return;
-
-      QRCode.toCanvas(qrImage, barcode.kode, { width: 250 }, function (error) {
-        if (error) console.error(error);
-      });
-
-      nomorText.textContent = "Nomor: " + barcode.nomor;
-
-      checkboxesDiv.innerHTML = "";
-      if (datasetType === "biosolar") {
-        checkboxesDiv.innerHTML = `
-          <label><input type="checkbox" ${barcode.checked.c1 ? "checked" : ""} onchange="saveCheck(${index}, 'c1', this.checked)"> Cek 1</label>
-          <label><input type="checkbox" ${barcode.checked.c2 ? "checked" : ""} onchange="saveCheck(${index}, 'c2', this.checked)"> Cek 2</label>
-        `;
-      } else {
-        checkboxesDiv.innerHTML = `
-          <label><input type="checkbox" ${barcode.checked.c1 ? "checked" : ""} onchange="saveCheck(${index}, 'c1', this.checked)"> Cek</label>
-        `;
-      }
-    }
-
-    function saveCheck(index, key, value) {
-      if (!barcodes[index].checked) barcodes[index].checked = {};
-      barcodes[index].checked[key] = value;
-    }
-
-    document.getElementById("btnPrev").addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        showBarcode(currentIndex);
-      }
-    });
-
-    document.getElementById("btnNext").addEventListener("click", () => {
-      if (currentIndex < barcodes.length - 1) {
-        currentIndex++;
-        showBarcode(currentIndex);
-      }
-    });
-
-    function startBarcode(filename, type) {
-      datasetType = type;
-      openFullscreen();
-      loadCSV(filename).then(() => {
-        if (barcodes.length > 0) {
-          startSection.style.display = "none";
-          barcodeSection.style.display = "flex";
-          currentIndex = 0;
-          showBarcode(currentIndex);
-        } else {
-          alert("Data kosong atau gagal dimuat.");
-        }
-      });
-    }
-
-    document.getElementById("pertaliteBtn").addEventListener("click", () => {
-      startBarcode("datapertalite.csv", "pertalite");
-    });
-
-    document.getElementById("biosolarBtn").addEventListener("click", () => {
-      startBarcode("datasolar.csv", "biosolar");
-    });
-
-    document.getElementById("backBtn").addEventListener("click", () => {
-      barcodeSection.style.display = "none";
-      startSection.style.display = "flex";
-    });
   </script>
 </body>
 </html>
