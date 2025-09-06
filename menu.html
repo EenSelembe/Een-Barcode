@@ -3,126 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Menu - Een Barcode Website</title>
+<title>Menu - EEN BARCODE WEBSITE</title>
 <style>
-  html, body {
-    margin:0; padding:0; height:100%; width:100%;
-    font-family:Arial, sans-serif;
-    overflow:hidden; /* kunci agar tidak bisa scroll */
-  }
-  body {
-    background: url('anime3.jpg') no-repeat center center;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color:white;
-    text-align:center;
-    padding: 20px;
-  }
+html, body {
+  margin:0; padding:0; height:100%; width:100%;
+  font-family:Arial,sans-serif;
+  overflow:hidden; /* kunci supaya layar tidak bisa digeser */
+}
+body {
+  margin:0;
+  height:100vh;
+  background: url('anime3.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
-  /* Judul sambutan */
-  #welcomeText {
-    font-size: 40px;
-    font-weight: 900;
-    text-transform: uppercase;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    margin-top: -40px; /* geser ke atas */
-    background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: glow 2s infinite alternate, fadeIn 1.6s ease;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-  }
+/* Tombol umum */
+button {
+  width:200px; padding:15px; margin:15px;
+  border:none; border-radius:8px;
+  font-size:18px; font-weight:bold; color:white;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(0,0,0,0.7); }
 
-  /* Animasi glow */
-  @keyframes glow {
-    from { text-shadow: 0 0 5px #ff0080, 0 0 10px #ff8c00; }
-    to   { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff0080; }
-  }
+/* Tombol logout */
+#logoutBtn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: auto;
+  padding: 10px 15px;
+  background: linear-gradient(135deg,#36d1dc,#5b86e5);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#logoutBtn span {
+  font-size: 18px;
+}
 
-  /* Animasi muncul */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Subteks */
-  #subText {
-    font-size: 18px;
-    font-weight: normal;
-    margin-bottom: 40px;
-    text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
-  }
-
-  /* Tombol umum */
-  button {
-    width:220px; padding:15px; margin:10px;
-    border:none; border-radius:8px;
-    font-size:18px; font-weight:bold; color:white;
-    background:linear-gradient(135deg,#ff512f,#dd2476);
-    cursor:pointer;
-    box-shadow:0 4px 12px rgba(0,0,0,0.5);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.7);
-  }
-
-  /* Tombol logout */
-  #logoutBtn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    width: auto;
-    padding: 10px 15px;
-    background: linear-gradient(135deg,#36d1dc,#5b86e5);
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  #logoutBtn span {
-    font-size: 18px;
-  }
-
-  /* Peringatan berjalan TANPA PUTUS */
-  #warning {
-    position: absolute;
-    bottom: 15px;
-    width: 100%;
-    overflow: hidden;
-    background: transparent;
-  }
-
-  #warning .marquee {
-    display: inline-block;
-    white-space: nowrap;
-    animation: marquee 8s linear infinite;
-  }
-
-  #warning span {
-    display: inline-block;
-    margin-right: 80px; /* jarak antar teks */
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff0000;
-    text-transform: uppercase;
-    animation: glowRed 1s infinite alternate;
-  }
-
-  @keyframes marquee {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  @keyframes glowRed {
-    from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff3333; }
-    to   { text-shadow: 0 0 20px #ff3333, 0 0 40px #ff0000; }
-  }
+/* Teks instruksi */
+.instruction {
+  font-size: 28px;
+  font-weight: 900;
+  text-align: center;
+  margin: 20px 0;
+  line-height: 1.4;
+  color: #fff;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+  letter-spacing: 2px;
+}
 </style>
 </head>
 <body>
@@ -132,61 +71,29 @@
   <span>🚪</span> Logout
 </button>
 
-<!-- Teks sambutan -->
-<div id="welcomeText"></div>
-
-<!-- Subteks -->
-<div id="subText">Barcode apa yang ingin kamu cari<br>silahkan pilih dibawah ini</div>
-
-<!-- Menu utama -->
-<button disabled onclick="location.href='barcode.html?type=solar'">⛽ Biosolar</button>
-<button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
-
-<!-- Peringatan berjalan -->
-<div id="warning">
-  <div class="marquee">
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
-  </div>
+<!-- Teks instruksi -->
+<div class="instruction">
+  Barcode apa yang ingin kamu cari<br>
+  Silahkan pilih dibawah ini
 </div>
 
+<!-- Menu utama -->
+<!-- Tombol Biosolar sementara dinonaktifkan -->
+<button disabled onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
+<button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
+
 <script>
-  // Cek login
-  if(localStorage.getItem("loggedIn") !== "true"){
-    window.location.href = "index.html";
-  }
+// Logout dan cegah kembali ke menu tanpa login
+function logout(){
+  localStorage.removeItem("loggedInUser"); // hapus sesi
+  window.location.href = "index.html";
+}
 
-  // Mapping username ke nama tampilan
-  const displayNames = {
-    "sokjago46": "Rendi",
-    "admin": "Administrator",
-    "user1": "Dewi",
-    "user2": "Andi",
-    "user3": "Sinta"
-  };
-
-  // Ambil username dari localStorage
-  const username = localStorage.getItem("username") || "User";
-  const displayName = displayNames[username] || username;
-
-  // Teks sambutan
-  document.getElementById("welcomeText").innerHTML =
-    "Hallo<br>" + displayName;
-
-  // Fungsi logout
-  function logout(){
-    localStorage.removeItem("loggedIn");
-    localStorage.removeItem("username");
-    window.location.href = "index.html";
-  }
-
-  // Cegah tombol back di HP
-  history.pushState(null, null, location.href);
-  window.onpopstate = function () {
-    history.go(1);
-  };
+// Cegah tombol back HP
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+  history.go(1);
+};
 </script>
 
 </body>
