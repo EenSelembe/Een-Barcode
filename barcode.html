@@ -79,9 +79,21 @@ html, body {
   border-radius: 8px;
 }
 
+#prevBtn {
+  position: absolute;
+  top: calc(45% + 220px); /* sama dengan nextBtn */
+  left: 20px;             /* tepi kiri */
+}
+
+#nextBtn {
+  position: absolute;
+  top: calc(45% + 220px); /* sejajar */
+  right: 20px;            /* tepi kanan */
+}
+
 .navBtn {
-  width: 60px;       /* sama */
-  height: 60px;      /* sama */
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   font-size: 24px;
   display: flex;
@@ -93,21 +105,6 @@ html, body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-}
-
-#prevBtn {
-  position: absolute;
-  top: calc(45% + 220px); /* posisi tepat di bawah barcode */
-  left: 20px;             /* tepi kiri */
-  transform: translateY(0);
-}
-
-#nextBtn {
-  position: absolute;
-  top: calc(45% + 220px); /* posisi tepat di bawah barcode */
-  right: 20px;            /* tepi kanan */
-  transform: translateY(0);
-}
 
 </style>
 </head>
