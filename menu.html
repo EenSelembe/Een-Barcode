@@ -3,58 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Een Barcode</title>
+<title>Menu - Een Barcode</title>
 <style>
 html, body {
   margin:0; padding:0; height:100%; width:100%;
   font-family:Arial,sans-serif;
 }
 body {
-  display:flex; justify-content:center; align-items:center;
-  background: url('anime1.jpg') no-repeat center center fixed;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  background: url('anime3.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-.login-box {
-  background:rgba(0,0,0,0.6);
-  padding:30px;
-  border-radius:12px;
-  text-align:center;
-  color:white;
-  width:300px;
-}
-.login-box h2 { margin-bottom:20px; }
-input {
-  width:90%; padding:10px; margin:10px 0;
-  border:none; border-radius:6px;
-}
 button {
-  width:100%; padding:12px;
+  width:200px; padding:15px; margin:15px;
   border:none; border-radius:8px;
-  background:linear-gradient(135deg,#00c6ff,#0072ff);
-  color:white; font-size:16px; font-weight:bold;
-  cursor:pointer; transition:0.2s;
+  font-size:18px; font-weight:bold; color:white;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-button:hover { transform:scale(1.05); }
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.7);
+}
 </style>
 </head>
 <body>
-<div class="login-box">
-  <h2>Login</h2>
-  <input type="text" placeholder="Username" id="username"><br>
-  <input type="password" placeholder="Password" id="password"><br>
-  <button onclick="login()">Masuk</button>
-</div>
-
-<script>
-function login() {
-  const user = document.getElementById('username').value;
-  const pass = document.getElementById('password').value;
-  if(user === "admin" && pass === "1234"){
-    location.href="menu.html";
-  } else {
-    alert("Username / Password salah!");
-  }
-}
-</script>
+<button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
+<button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
 </body>
 </html>
