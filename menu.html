@@ -89,7 +89,7 @@
     font-size: 18px;
   }
 
-  /* Peringatan berjalan */
+  /* Peringatan berjalan TANPA PUTUS */
   #warning {
     position: absolute;
     bottom: 15px;
@@ -100,7 +100,7 @@
   }
   #warning span {
     display: inline-block;
-    padding-left: 100%;
+    padding-right: 50px;
     animation: marquee 12s linear infinite, glowRed 1s infinite alternate;
     font-size: 18px;
     font-weight: bold;
@@ -110,7 +110,7 @@
 
   @keyframes marquee {
     0%   { transform: translateX(0%); }
-    100% { transform: translateX(-100%); }
+    100% { transform: translateX(-50%); }
   }
 
   @keyframes glowRed {
@@ -137,7 +137,11 @@
 <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
 
 <!-- Peringatan berjalan -->
-<div id="warning"><span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span></div>
+<div id="warning">
+  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+  <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+</div>
 
 <script>
   // Cek login
