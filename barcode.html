@@ -104,6 +104,23 @@ html, body {
 #prevBtn { left:20px; }
 #nextBtn { right:20px; }
 
+/* ✅ Tombol reset ceklis */
+#resetChecks {
+  position:absolute;
+  bottom:60px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:10px 20px;
+  font-size:16px;
+  font-weight:bold;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);
+}
+
 .warning {
   position:absolute;
   bottom:10px;
@@ -141,6 +158,9 @@ html, body {
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
+<!-- ✅ Tombol reset ceklis -->
+<button id="resetChecks">🔄 Hapus Semua Ceklis</button>
+
 <div class="warning"><span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -155,6 +175,7 @@ const prevBtn=document.getElementById('prevBtn');
 const nextBtn=document.getElementById('nextBtn');
 const checkboxContainer=document.getElementById('checkboxContainer');
 const usernameDisplay=document.getElementById("usernameDisplay");
+const resetBtn=document.getElementById("resetChecks");
 
 function getParam(name){ return new URLSearchParams(window.location.search).get(name); }
 function goBack(){ window.location.href="menu.html"; }
@@ -163,9 +184,9 @@ function goBack(){ window.location.href="menu.html"; }
 const user = localStorage.getItem("currentUser") || "Pengguna";
 usernameDisplay.textContent = "👤 " + user;
 
+// ✅ Selalu ambil file CSV terbaru (hindari cache HP)
 const file=(type==="pertalite")?"datapertalite.csv":"datasolar.csv";
-
-fetch(file)
+fetch(file + "?nocache=" + new Date().getTime())
 .then(res=>res.text())
 .then(text=>{
   barcodes=text.trim().split("\n");
@@ -215,6 +236,16 @@ prevBtn.addEventListener("click",()=>{
   saveCheck(currentIndex);
   if(currentIndex>0){ currentIndex--; showBarcode(currentIndex); }
   else{ alert("Ini barcode pertama."); }
+});
+
+// ✅ Fungsi hapus semua ceklis
+resetBtn.addEventListener("click",()=>{
+  if(confirm("Yakin ingin menghapus semua status ceklis?")){
+    checks = {};
+    localStorage.removeItem("checks_"+type);
+    showBarcode(currentIndex);
+    alert("Semua status ceklis berhasil dihapus.");
+  }
 });
 </script>
 </body>
