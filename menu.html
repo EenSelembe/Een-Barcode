@@ -17,20 +17,32 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color:white;
+    text-align:center;
+    padding: 20px;
   }
 
-  /* Judul */
+  /* Judul sambutan */
   #welcomeText {
-    font-size: 26px;
+    font-size: 34px;
     font-weight: bold;
-    color: white;
-    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    line-height: 1.3;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  /* Subteks */
+  #subText {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
   }
 
   /* Tombol umum */
   button {
-    width:220px; padding:15px; margin:15px;
+    width:220px; padding:15px; margin:10px;
     border:none; border-radius:8px;
     font-size:18px; font-weight:bold; color:white;
     background:linear-gradient(135deg,#ff512f,#dd2476);
@@ -59,6 +71,16 @@
   #logoutBtn span {
     font-size: 18px;
   }
+
+  /* Peringatan bawah */
+  #warning {
+    position: absolute;
+    bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff4444;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+  }
 </style>
 </head>
 <body>
@@ -71,9 +93,15 @@
 <!-- Teks sambutan -->
 <div id="welcomeText"></div>
 
+<!-- Subteks -->
+<div id="subText">Barcode apa yang ingin kamu cari<br>silahkan pilih dibawah ini</div>
+
 <!-- Menu utama -->
 <button onclick="location.href='barcode.html?type=solar'">🔋 Biosolar</button>
 <button onclick="location.href='barcode.html?type=pertalite'">⛽ Pertalite</button>
+
+<!-- Peringatan -->
+<div id="warning">!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</div>
 
 <script>
   // Cek login
@@ -93,7 +121,10 @@
   // Ambil username dari localStorage
   const username = localStorage.getItem("username") || "User";
   const displayName = displayNames[username] || username;
-  document.getElementById("welcomeText").innerText = "Halo, " + displayName;
+
+  // Teks sambutan
+  document.getElementById("welcomeText").innerHTML =
+    "Hallo<br>" + displayName;
 
   // Fungsi logout
   function logout(){
