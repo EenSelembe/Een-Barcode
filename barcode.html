@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Barcode - Een Barcode</title>
+<title>Barcode - Een Barcode Website</title>
 <style>
 html, body {
-  margin:0; padding:0; height:100%; width:100%;
-  overflow:hidden;       /* kunci layar agar tidak bisa scroll */
-  touch-action:none;     /* cegah geser */
+  margin:0; padding:20px; height:100%; width:100%;
   font-family:Arial,sans-serif; color:white; text-align:center;
-  background: url('anime2.jpg') no-repeat center center;
+  background: url('anime2.jpg') no-repeat center center fixed;
   background-size: cover;
+  overflow:hidden;
 }
 
 /* Tombol kembali */
@@ -23,76 +22,94 @@ html, body {
   box-shadow:0 4px 12px rgba(0,0,0,0.5);
 }
 
-/* Konten utama di tengah layar */
-.main-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* pusat vertikal */
-  align-items: center;     /* pusat horizontal */
-  height: 100%;            /* isi penuh layar */
-}
-#qrcode {
-  margin: 20px 0;
-}
-#qrcode canvas {
-  width:80vw !important;
-  height:80vw !important;
-}
+/* QR code */
+#qrcode { margin-top:100px; }
+#qrcode canvas { width:80vw !important; height:80vw !important; }
+
+/* Nomor barcode */
 .barcode-number {
-  font-size:22px;
-  font-weight:bold;
+  font-size:22px; font-weight:bold;
   text-shadow:1px 1px 3px black;
   margin:12px;
 }
+
+/* Checkbox */
 .checkboxes {
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  margin-top:10px;
+  display:flex; gap:20px; justify-content:center; margin-bottom:20px;
 }
 .checkboxes label {
-  font-size:18px;
-  color:white;
+  font-size:18px; color:white;
   background: rgba(0,0,0,0.5);
-  padding:5px 10px;
-  border-radius:8px;
+  padding:5px 10px; border-radius:8px;
 }
 
 /* Tombol navigasi */
 .navBtn {
   position:absolute;
-  bottom:80px;
+  bottom:120px;   /* dinaikkan agar tidak tabrakan dengan warning */
   background: rgba(255,255,255,0.7);
-  border:none;
-  padding:15px;
-  border-radius:50%;
-  font-size:28px;
-  cursor:pointer;
+  border:none; padding:15px; border-radius:50%;
+  font-size:28px; cursor:pointer;
 }
 #prevBtn { left:30px; }
 #nextBtn { right:30px; }
+
+/* PERINGATAN MERAH BERJALAN */
+#warning {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 9999;
+  padding: 5px 0;
+  overflow: hidden;
+}
+#warning .marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 6s linear infinite;
+}
+#warning span {
+  display: inline-block;
+  margin-right: 80px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff0000;
+  text-transform: uppercase;
+  animation: glowRed 1s infinite alternate;
+}
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes glowRed {
+  from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff3333; }
+  to   { text-shadow: 0 0 20px #ff3333, 0 0 40px #ff0000; }
+}
 </style>
 </head>
 <body>
 
 <button id="topButton" onclick="goBack()">⬅️ Kembali</button>
-
-<div class="main-content">
-  <div id="qrcode"></div>
-  <div class="barcode-number" id="barcodeNumber"></div>
-  <div class="checkboxes" id="checkboxContainer"></div>
-</div>
-
+<div id="qrcode"></div>
+<div class="barcode-number" id="barcodeNumber"></div>
+<div class="checkboxes" id="checkboxContainer"></div>
 <button id="prevBtn" class="navBtn">⬅</button>
 <button id="nextBtn" class="navBtn">➡</button>
 
+<!-- PERINGATAN MERAH BERJALAN -->
+<div id="warning">
+  <div class="marquee">
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+    <span>!!! TOLONG RAHASIAKAN BARCODE INI DARI SIAPAPUN !!!</span>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// Cek login
-if(localStorage.getItem("loggedIn") !== "true"){
-  window.location.replace("index.html");
-}
-
 let barcodes=[], currentIndex=0, checks={};
 const qrcodeDiv=document.getElementById('qrcode');
 const barcodeNumberDiv=document.getElementById('barcodeNumber');
@@ -134,12 +151,8 @@ function showBarcode(index){
 
 function saveCheck(index){
   const currentChecks={};
-  if(type==="solar"){
-    currentChecks.check1=document.getElementById("check1").checked;
-    currentChecks.check2=document.getElementById("check2").checked;
-  } else {
-    currentChecks.check1=document.getElementById("check1").checked;
-  }
+  if(type==="solar"){ currentChecks.check1=document.getElementById("check1").checked; currentChecks.check2=document.getElementById("check2").checked; }
+  else{ currentChecks.check1=document.getElementById("check1").checked; }
   checks[index]=currentChecks;
 }
 
