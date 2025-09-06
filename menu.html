@@ -1,61 +1,38 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu - Een Barcode</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      font-family: Arial, sans-serif;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: #000; /* fallback warna hitam */
-      background-image: url('anime3.jpg'); /* pastikan file ada di folder sama */
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: cover;
-    }
-    button {
-      width: 200px;
-      padding: 15px;
-      margin: 15px;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(135deg, #ff512f, #dd2476);
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.7);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu - Een Barcode</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+<style>
+html, body { margin:0; padding:0; height:100%; width:100%; font-family:Arial,sans-serif; }
+body {
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  background:url('anime.jpg') no-repeat center center fixed;
+  background-size:cover;
+}
+button {
+  width:200px; padding:15px; margin:15px;
+  border:none; border-radius:8px;
+  font-size:18px; font-weight:bold; color:white;
+  background:linear-gradient(135deg,#ff512f,#dd2476);
+  cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.5);
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+button:hover { transform:scale(1.05); box-shadow:0 6px 16px rgba(0,0,0,0.7);}
+</style>
 </head>
 <body>
-  <button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
-  <button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
+<button onclick="location.href='barcode.html?type=solar'">Biosolar</button>
+<button onclick="location.href='barcode.html?type=pertalite'">Pertalite</button>
 
-  <script>
-    // Fullscreen otomatis saat disentuh HP
-    document.body.addEventListener('click', ()=>{
-      if(document.documentElement.requestFullscreen){
-        document.documentElement.requestFullscreen();
-      }
-    }, {once:true});
-  </script>
+<script>
+// Fullscreen HP
+document.body.addEventListener('click', ()=>{
+  if(document.documentElement.requestFullscreen){ document.documentElement.requestFullscreen(); }
+}, {once:true});
+</script>
 </body>
 </html>
