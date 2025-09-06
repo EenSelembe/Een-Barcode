@@ -10,15 +10,41 @@ html, body {
   margin:0; padding:0;
   height:100%; width:100%;
   font-family:Arial,sans-serif;
-  overflow: hidden; /* ⛔ cegah scroll */
+  overflow: hidden; /* cegah scroll */
 }
 body {
   height:100vh;
   background: url('anime.jpg') no-repeat center center;
   background-size: cover;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+/* Tulisan Selamat Datang */
+.welcome {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 1.2;
+  background: linear-gradient(90deg, #ff0080, #ff8c00, #40e0d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glow 2s infinite alternate, fadeIn 2s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+@keyframes glow {
+  from { text-shadow: 0 0 10px #ff0080, 0 0 20px #ff8c00, 0 0 30px #40e0d0; }
+  to   { text-shadow: 0 0 20px #40e0d0, 0 0 30px #ff0080, 0 0 40px #ff8c00; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-50px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Kotak login */
@@ -30,6 +56,8 @@ body {
   color: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   width: 300px;
+  margin-top: auto;   /* dorong ke bawah */
+  margin-bottom: 60px;
 }
 .login-box h2 {
   margin-bottom: 20px;
@@ -62,6 +90,12 @@ body {
 </head>
 <body>
 
+<!-- Tulisan besar -->
+<div class="welcome">
+  SELAMAT<br>DATANG
+</div>
+
+<!-- Kotak login -->
 <div class="login-box">
   <h2>Login</h2>
   <input type="text" id="username" placeholder="Username">
@@ -71,8 +105,7 @@ body {
 
 <script>
 function login(){
-  // Contoh login sederhana (langsung masuk menu)
-  // Bisa diganti validasi username & password
+  // Bisa ditambah validasi username/password kalau perlu
   window.location.href = "menu.html";
 }
 </script>
